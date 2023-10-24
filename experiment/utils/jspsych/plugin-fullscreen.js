@@ -15,14 +15,14 @@ var jsPsychFullscreen = (function (jspsych) {
           message: {
               type: jspsych.ParameterType.HTML_STRING,
               pretty_name: "Message",
-              default: "<p>The experiment will switch to full screen mode when you press the button below</p>",
+              default: "<p>Исследование перейдет в полноэкранный режим после того, как Вы нажмете на кнопку ниже</p>",
               array: false,
           },
           /** The text that appears on the button to enter fullscreen */
           button_label: {
               type: jspsych.ParameterType.STRING,
               pretty_name: "Button label",
-              default: "Continue",
+              default: "Начать",
               array: false,
           },
           /** The length of time to delay after entering fullscreen mode before ending the trial. */

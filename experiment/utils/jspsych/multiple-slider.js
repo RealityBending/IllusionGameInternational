@@ -85,7 +85,7 @@ var jsPsychMultipleSlider = (function(jspsych) {
       button_label: {
         type: jspsych.ParameterType.STRING,
         pretty_name: 'Button label',
-        default:  'Continue',
+        default:  'Продолжить',
         description: 'Label of the button.'
       },
       autocomplete: {
