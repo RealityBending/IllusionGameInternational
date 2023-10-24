@@ -165,7 +165,7 @@ var sss_dimensions = [
 function format_questions_analog(
     items,
     dimensions,
-    ticks = ["Inaccurate", "Accurate"]
+    ticks = ["Не верно", "Верно"]
 ) {
     var questions = []
     for (const [index, element] of items.entries()) {
@@ -190,7 +190,7 @@ var ipip6_questionaire = {
     questions: format_questions_analog(ipip6_items, ipip6_dimensions),
     randomize_question_order: false,
     preamble:
-        "<p><b>About your personality...</b></p><p>Please answer the following questions based on how accurately each statement describes you in general.</p>",
+        "<p>Пожалуйста, ответите на следующие вопросы исходя из того, насколько точно каждое утверждение описывает Вас в целом.</p>",
     require_movement: false,
     slider_width: 600,
     data: {
@@ -205,10 +205,10 @@ for (const [index, element] of pid_items.entries()) {
         prompt: "<b>" + element + "</b>",
         name: pid_dimensions[index],
         labels: [
-            "Very or Often False",
-            "Sometimes or Somewhat False",
-            "Sometimes or Somewhat True",
-            "Very or Often True",
+            "Совершенно неверно или часто неверно",
+            "Иногда или в некоторой степени неверно",
+            "Иногда или в некоторой степени верно",
+            "Совершенно верно или часто верно",
         ],
         required: false,
     })
@@ -219,8 +219,8 @@ var pid5_questionaire = {
     questions: pid_questions,
     randomize_question_order: false,
     preamble:
-        "<p><b>About yourself...</b></p><p>Below is a list of things different people might say about themselves.</p>" +
-        "<p>Please select the response that best describes you.</p>",
+        "<p>Перед Вами список утверждений, которые разные люди могут использовать для того, чтобы охарактеризовать себя.</p>" +
+        "<p>Пожалуйста, выберите ответ, который наилучшим образом описывает вас.</p>",
     require_movement: false,
     slider_width: 700,
     data: {
