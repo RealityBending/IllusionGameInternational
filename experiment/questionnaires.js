@@ -165,7 +165,7 @@ var sss_dimensions = [
 function format_questions_analog(
     items,
     dimensions,
-    ticks = ["Не верно", "Верно"]
+    ticks = ["Неверно", "Верно"]
 ) {
     var questions = []
     for (const [index, element] of items.entries()) {
@@ -220,7 +220,7 @@ var pid5_questionaire = {
     randomize_question_order: false,
     preamble:
         "<p>Перед Вами список утверждений, которые разные люди могут использовать для того, чтобы охарактеризовать себя.</p>" +
-        "<p>Пожалуйста, выберите ответ, который наилучшим образом описывает вас.</p>",
+        "<p>Пожалуйста, выберите ответ, который наилучшим образом описывает Вас.</p>",
     require_movement: false,
     slider_width: 700,
     data: {
