@@ -75,16 +75,16 @@
         })
 
         // Enter fullscreen mode
-        // timeline.push({
-        //     type: jsPsychFullscreen,
-        //     fullscreen_mode: true,
-        //     delay_after: 0,
-        // })
+        timeline.push({
+            type: jsPsychFullscreen,
+            fullscreen_mode: true,
+            delay_after: 0,
+        })
 
         /* ----------------- Session Info ----------------- */
         timeline.push(demographics_browser_info)
-        timeline.push(demographics_participant_id)
-        // timeline.push(demographics)
+        // timeline.push(demographics_participant_id)
+        // timeline.push(demographics_basic)
 
         /* ============================================================== */
         /* --------------  ------Questionnaires -----------  ------------ */
@@ -100,12 +100,12 @@
 
         // End =================================================================
         // Exit fullscreen mode
-        // timeline.push({
-        //     type: jsPsychFullscreen,
-        //     fullscreen_mode: false,
-        // })
+        timeline.push({
+            type: jsPsychFullscreen,
+            fullscreen_mode: false,
+        })
 
-        // Save data
+        // Save data via DataPipe
         timeline.push({
             type: jsPsychPipe,
             action: "save",

@@ -42,8 +42,8 @@ var demographics_participant_id = {
             name: "Participant_ID",
         },
     ],
-    // button_label: "Продолжить",
-    button_label: "Continue",
+    // button_label: "Continue",
+    button_label: "Продолжить",
     data: {
         screen: "participant_id",
     },
@@ -57,32 +57,41 @@ var demographics_participant_id = {
     },
 }
 
-// var demographics = {
-//     type: jsPsychSurveyText,
-//     questions: [
-//         {
-//             prompt: "Please enter your age (in years)",
-//             placeholder: "e.g., '31'",
-//             name: "age",
-//         },
-//         {
-//             prompt: "Please enter your gender",
-//             placeholder: "e.g., Female",
-//             name: "gender",
-//         },
-//         {
-//             prompt: "Please enter your ethnicity",
-//             placeholder: "e.g., Caucasian",
-//             name: "ethnicity",
-//         },
-//         {
-//             prompt: "English level",
-//             placeholder: "native, fluent, intermediate, beginner",
-//             name: "english",
-//         },
-//     ],
-//     data: {
-//         screen: "demographics",
-//     },
-// }
-
+var demographics_basic = {
+    type: jsPsychSurveyText,
+    questions: [
+        // {
+        //     prompt: "Please enter your age (in years)",
+        //     placeholder: "e.g., '31'",
+        //     name: "age",
+        // },
+        {
+            prompt: "Age - RUSSIAN VERSION",
+            placeholder: "RUSSIAN VERSION",
+            name: "age",
+        },
+        // {
+        //     prompt: "Please enter your gender",
+        //     placeholder: "e.g., Female",
+        //     name: "gender",
+        // },
+        {
+            prompt: "Sex - RUSSIAN VERSION",
+            placeholder: "RUSSIAN VERSION",
+            name: "gender",
+        },
+        // {
+        //     prompt: "Please enter your ethnicity",
+        //     placeholder: "e.g., Caucasian",
+        //     name: "ethnicity",
+        // },
+        // {
+        //     prompt: "English level",
+        //     placeholder: "native, fluent, intermediate, beginner",
+        //     name: "english",
+        // },
+    ],
+    data: {
+        screen: "demographics",
+    },
+}
