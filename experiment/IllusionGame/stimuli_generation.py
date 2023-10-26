@@ -78,8 +78,8 @@ def generate_images(
                 tar = "perceptual_"
             else:
                 tar = ""
-            path = f"{name}_{tar}{float(np.round(strength, 5)):<07}_{float(np.round(difference, 5)):<07}.png"
-            img.save("stimuli/" + path)
+            file = f"{name}_{tar}{float(np.round(strength, 5)):<07}_{float(np.round(difference, 5)):<07}.png"
+            img.save("stimuli/" + file)
 
             # Compute expected response
             if name in [
@@ -100,15 +100,12 @@ def generate_images(
                 else:
                     correct = "arrowdown"
 
-            # Randomize fixation cross position
-            # fix_cross = ["+", " +", "+ ", "\n+", "+\n", "\n +", "\n+ ", " +\n", "+ \n"]
-
             # Save parameters
             data.append(
                 {
-                    "stimulus": "stimuli/" + path,
-                    # "fix_cross": random.choice(fix_cross),
+                    "stimulus": "IllusionGame/stimuli/" + file,
                     "data": {
+                        "file": file,
                         "screen": "IG_Trial",
                         "block": block,
                         "correct_response": correct,
