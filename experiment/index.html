@@ -107,14 +107,13 @@
         })
 
         // Save data
-        var send_data_via_datapipe = {
+        timeline.push({
             type: jsPsychPipe,
             action: "save",
             experiment_id: "KnBMjNNnvXFM", // This in generated in the DataPipe interface
             filename: `${jsPsych.randomization.randomID(10)}.csv`,
-            data_string: () => jsPsych.data.get().csv(),
-        }
-        timeline.push(send_data_via_datapipe)
+            data_string: () => jsPsych.data.get().json(),
+        })
 
         /* ----------------- Run the timeline ----------------- */
         jsPsych.run(timeline)
