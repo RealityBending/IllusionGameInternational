@@ -60,19 +60,19 @@
         var timeline = []
 
         var jsPsych = initJsPsych({
-            // on_finish: function () {
-            //     // Display data in browser (useful for debugging)
-            //     jsPsych.data.displayData("json")
-            //     // Save data based on the participant_id variable that gets created later
-            //     jsPsych.data
-            //         .get()
-            //         .localSave(
-            //             "json",
-            //             `${
-            //                 jsPsych.data.get().values()[0]["participant_id"]
-            //             }.json`
-            //         )
-            // },
+            on_finish: function () {
+                // Display data in browser (useful for debugging)
+                jsPsych.data.displayData("json")
+                // // Save data based on the participant_id variable that gets created later
+                // jsPsych.data
+                //     .get()
+                //     .localSave(
+                //         "json",
+                //         `${
+                //             jsPsych.data.get().values()[0]["participant_id"]
+                //         }.json`
+                //     )
+            },
         })
 
         // Enter fullscreen mode
