@@ -34,7 +34,8 @@ var demographics_participant_id = {
     type: jsPsychSurveyText,
     questions: [
         {
-            prompt: "Введите номер участника/участницы:",
+            // prompt: "Введите номер участника/участницы:",
+            prompt: "Enter participant ID:",
             placeholder: "001",
             name: "Participant_ID",
         },
