@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <!--create title shown in tab; not the same as header on webpage-->
+        <!-- Title shown in tab -->
         <title>Illusion Game</title>
 
+        <!-- Load all necessary plugins -->
         <script src="jspsych/jspsych.js"></script>
-
-        <!--Load all necessary plugins stored in utils-->
         <script src="jspsych/plugin-html-keyboard-response.js"></script>
         <script src="jspsych/plugin-browser-check.js"></script>
         <script src="jspsych/plugin-html-button-response.js"></script>
@@ -85,6 +84,7 @@
         /* ----------------- Session Info ----------------- */
         timeline.push(demographics_browser_info)
         timeline.push(demographics_participant_id)
+        // timeline.push(demographics)
 
         /* ============================================================== */
         /* --------------  ------Questionnaires -----------  ------------ */

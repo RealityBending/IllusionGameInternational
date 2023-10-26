@@ -3,6 +3,8 @@ var demographics_browser_info = {
     type: jsPsychBrowserCheck,
     data: {
         screen: "browser_info",
+        date: new Date().toLocaleDateString("fr-FR"),
+        time: new Date().toLocaleTimeString("fr-FR"),
     },
     on_finish: function () {
         data = jsPsych.data.get().filter({ screen: "browser_info" }).values()[0]
@@ -40,11 +42,10 @@ var demographics_participant_id = {
             name: "Participant_ID",
         },
     ],
+    // button_label: "Продолжить",
     button_label: "Continue",
     data: {
         screen: "participant_id",
-        date: new Date().toLocaleDateString("fr-FR"),
-        time: new Date().toLocaleTimeString("fr-FR"),
     },
     on_finish: function () {
         // Store `participant_id` so that it can be reused later
@@ -84,4 +85,4 @@ var demographics_participant_id = {
 //         screen: "demographics",
 //     },
 // }
-// timeline.push(demographics)
+
