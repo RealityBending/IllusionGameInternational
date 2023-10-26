@@ -22,6 +22,9 @@
         <script src="jspsych/plugin-image-keyboard-response.js"></script>
         <script src="jspsych/plugin-survey-multi-choice.js"></script>
 
+        <!-- To save data via DataPipe (for online experiments) -->
+        <script src="https://unpkg.com/@jspsych-contrib/plugin-pipe@0.1"></script>
+
         <!-- Load parameters here (always below the loading of the JsPsych) -->
         <script src="demographics.js"></script>
         <script src="questionnaires.js"></script>
@@ -89,12 +92,12 @@
         /* ============================================================== */
         // Adding some characters in russian to force correct encoding: Введите
 
-        // Questionnaires -----------------------------------------------------
-        var Qs = [ipip6_questionaire, pid5_questionaire]
-        Qs = jsPsych.randomization.shuffle(Qs) // Randomize
-        for (var i = 0; i < Qs.length; i++) {
-            timeline.push(Qs[i]) // Push each element to timeline
-        }
+        // // Questionnaires -----------------------------------------------------
+        // var Qs = [ipip6_questionaire, pid5_questionaire]
+        // Qs = jsPsych.randomization.shuffle(Qs) // Randomize
+        // for (var i = 0; i < Qs.length; i++) {
+        //     timeline.push(Qs[i]) // Push each element to timeline
+        // }
 
         // End =================================================================
         // Exit fullscreen mode
@@ -102,6 +105,16 @@
             type: jsPsychFullscreen,
             fullscreen_mode: false,
         })
+
+        // Save data
+        var send_data_via_datapipe = {
+            type: jsPsychPipe,
+            action: "save",
+            experiment_id: "KnBMjNNnvXFM", // This in generated in the DataPipe interface
+            filename: `${jsPsych.randomization.randomID(10)}.csv`,
+            data_string: () => jsPsych.data.get().csv(),
+        }
+        timeline.push(send_data_via_datapipe)
 
         /* ----------------- Run the timeline ----------------- */
         jsPsych.run(timeline)
