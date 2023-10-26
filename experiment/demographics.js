@@ -40,6 +40,7 @@ var demographics_participant_id = {
             name: "Participant_ID",
         },
     ],
+    button_label: "Continue",
     data: {
         screen: "participant_id",
         date: new Date().toLocaleDateString("fr-FR"),
