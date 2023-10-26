@@ -89,12 +89,12 @@
         /* ============================================================== */
         // Adding some characters in russian to force correct encoding: Введите
 
-        // // Questionnaires -----------------------------------------------------
-        // var Qs = [ipip6_questionaire, pid5_questionaire]
-        // Qs = jsPsych.randomization.shuffle(Qs) // Randomize
-        // for (var i = 0; i < Qs.length; i++) {
-        //     timeline.push(Qs[i]) // Push each element to timeline
-        // }
+        // Questionnaires -----------------------------------------------------
+        var Qs = [ipip6_questionaire, pid5_questionaire]
+        Qs = jsPsych.randomization.shuffle(Qs) // Randomize
+        for (var i = 0; i < Qs.length; i++) {
+            timeline.push(Qs[i]) // Push each element to timeline
+        }
 
         // End =================================================================
         // Exit fullscreen mode
