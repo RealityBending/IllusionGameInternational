@@ -70,7 +70,7 @@ var jsPsychModule = (function (exports) {
     	return self;
     };
 
-    var version = "7.3.1";
+    var version = "7.3.3";
 
     class MigrationError extends Error {
         constructor(message = "The global `jsPsych` variable is no longer available in jsPsych v7.") {
@@ -135,11 +135,44 @@ var jsPsychModule = (function (exports) {
             return obj;
         }
     }
+    /**
+     * Merges two objects, recursively.
+     * @param obj1 Object to merge
+     * @param obj2 Object to merge
+     */
+    function deepMerge(obj1, obj2) {
+        let merged = {};
+        for (const key in obj1) {
+            if (obj1.hasOwnProperty(key)) {
+                if (typeof obj1[key] === "object" && obj2.hasOwnProperty(key)) {
+                    merged[key] = deepMerge(obj1[key], obj2[key]);
+                }
+                else {
+                    merged[key] = obj1[key];
+                }
+            }
+        }
+        for (const key in obj2) {
+            if (obj2.hasOwnProperty(key)) {
+                if (!merged.hasOwnProperty(key)) {
+                    merged[key] = obj2[key];
+                }
+                else if (typeof obj2[key] === "object") {
+                    merged[key] = deepMerge(merged[key], obj2[key]);
+                }
+                else {
+                    merged[key] = obj2[key];
+                }
+            }
+        }
+        return merged;
+    }
 
     var utils = /*#__PURE__*/Object.freeze({
         __proto__: null,
         unique: unique,
-        deepCopy: deepCopy
+        deepCopy: deepCopy,
+        deepMerge: deepMerge
     });
 
     class DataColumn {
@@ -1105,8 +1138,12 @@ var jsPsychModule = (function (exports) {
     }
 
     class SimulationAPI {
+        constructor(getDisplayContainerElement, setJsPsychTimeout) {
+            this.getDisplayContainerElement = getDisplayContainerElement;
+            this.setJsPsychTimeout = setJsPsychTimeout;
+        }
         dispatchEvent(event) {
-            document.body.dispatchEvent(event);
+            this.getDisplayContainerElement().dispatchEvent(event);
         }
         /**
          * Dispatches a `keydown` event for the specified key
@@ -1129,7 +1166,7 @@ var jsPsychModule = (function (exports) {
          */
         pressKey(key, delay = 0) {
             if (delay > 0) {
-                setTimeout(() => {
+                this.setJsPsychTimeout(() => {
                     this.keyDown(key);
                     this.keyUp(key);
                 }, delay);
@@ -1146,7 +1183,7 @@ var jsPsychModule = (function (exports) {
          */
         clickTarget(target, delay = 0) {
             if (delay > 0) {
-                setTimeout(() => {
+                this.setJsPsychTimeout(() => {
                     target.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
                     target.dispatchEvent(new MouseEvent("mouseup", { bubbles: true }));
                     target.dispatchEvent(new MouseEvent("click", { bubbles: true }));
@@ -1166,7 +1203,7 @@ var jsPsychModule = (function (exports) {
          */
         fillTextInput(target, text, delay = 0) {
             if (delay > 0) {
-                setTimeout(() => {
+                this.setJsPsychTimeout(() => {
                     target.value = text;
                 }, delay);
             }
@@ -1275,15 +1312,27 @@ var jsPsychModule = (function (exports) {
         }
     }
 
+    /**
+     * A class that provides a wrapper around the global setTimeout and clearTimeout functions.
+     */
     class TimeoutAPI {
         constructor() {
             this.timeout_handlers = [];
         }
+        /**
+         * Calls a function after a specified delay, in milliseconds.
+         * @param callback The function to call after the delay.
+         * @param delay The number of milliseconds to wait before calling the function.
+         * @returns A handle that can be used to clear the timeout with clearTimeout.
+         */
         setTimeout(callback, delay) {
             const handle = window.setTimeout(callback, delay);
             this.timeout_handlers.push(handle);
             return handle;
         }
+        /**
+         * Clears all timeouts that have been created with setTimeout.
+         */
         clearAllTimeouts() {
             for (const handler of this.timeout_handlers) {
                 clearTimeout(handler);
@@ -1294,13 +1343,12 @@ var jsPsychModule = (function (exports) {
 
     function createJointPluginAPIObject(jsPsych) {
         const settings = jsPsych.getInitSettings();
-        return Object.assign({}, ...[
-            new KeyboardListenerAPI(jsPsych.getDisplayContainerElement, settings.case_sensitive_responses, settings.minimum_valid_rt),
-            new TimeoutAPI(),
-            new MediaAPI(settings.use_webaudio, jsPsych.webaudio_context),
-            new HardwareAPI(),
-            new SimulationAPI(),
-        ].map((object) => autoBind(object)));
+        const keyboardListenerAPI = autoBind(new KeyboardListenerAPI(jsPsych.getDisplayContainerElement, settings.case_sensitive_responses, settings.minimum_valid_rt));
+        const timeoutAPI = autoBind(new TimeoutAPI());
+        const mediaAPI = autoBind(new MediaAPI(settings.use_webaudio, jsPsych.webaudio_context));
+        const hardwareAPI = autoBind(new HardwareAPI());
+        const simulationAPI = autoBind(new SimulationAPI(jsPsych.getDisplayContainerElement, timeoutAPI.setTimeout));
+        return Object.assign({}, ...[keyboardListenerAPI, timeoutAPI, mediaAPI, hardwareAPI, simulationAPI]);
     }
 
     var wordList = [
@@ -3055,13 +3103,14 @@ var jsPsychModule = (function (exports) {
                 }
             };
             let trial_complete;
+            let trial_sim_opts;
+            let trial_sim_opts_merged;
             if (!this.simulation_mode) {
                 trial_complete = trial.type.trial(this.DOM_target, trial, load_callback);
             }
             if (this.simulation_mode) {
                 // check if the trial supports simulation
                 if (trial.type.simulate) {
-                    let trial_sim_opts;
                     if (!trial.simulation_options) {
                         trial_sim_opts = this.simulation_options.default;
                     }
@@ -3083,13 +3132,16 @@ var jsPsychModule = (function (exports) {
                             trial_sim_opts = trial.simulation_options;
                         }
                     }
-                    trial_sim_opts = this.utils.deepCopy(trial_sim_opts);
-                    trial_sim_opts = this.replaceFunctionsWithValues(trial_sim_opts, null);
-                    if ((trial_sim_opts === null || trial_sim_opts === void 0 ? void 0 : trial_sim_opts.simulate) === false) {
+                    // merge in default options that aren't overriden by the trial's simulation_options
+                    // including nested parameters in the simulation_options
+                    trial_sim_opts_merged = this.utils.deepMerge(this.simulation_options.default, trial_sim_opts);
+                    trial_sim_opts_merged = this.utils.deepCopy(trial_sim_opts_merged);
+                    trial_sim_opts_merged = this.replaceFunctionsWithValues(trial_sim_opts_merged, null);
+                    if ((trial_sim_opts_merged === null || trial_sim_opts_merged === void 0 ? void 0 : trial_sim_opts_merged.simulate) === false) {
                         trial_complete = trial.type.trial(this.DOM_target, trial, load_callback);
                     }
                     else {
-                        trial_complete = trial.type.simulate(trial, (trial_sim_opts === null || trial_sim_opts === void 0 ? void 0 : trial_sim_opts.mode) || this.simulation_mode, trial_sim_opts, load_callback);
+                        trial_complete = trial.type.simulate(trial, (trial_sim_opts_merged === null || trial_sim_opts_merged === void 0 ? void 0 : trial_sim_opts_merged.mode) || this.simulation_mode, trial_sim_opts_merged, load_callback);
                     }
                 }
                 else {
@@ -3099,8 +3151,11 @@ var jsPsychModule = (function (exports) {
             }
             // see if trial_complete is a Promise by looking for .then() function
             const is_promise = trial_complete && typeof trial_complete.then == "function";
-            // in simulation mode we let the simulate function call the load_callback always.
-            if (!is_promise && !this.simulation_mode) {
+            // in simulation mode we let the simulate function call the load_callback always,
+            // so we don't need to call it here. however, if we are in simulation mode but not simulating
+            // this particular trial we need to call it.
+            if (!is_promise &&
+                (!this.simulation_mode || (this.simulation_mode && (trial_sim_opts_merged === null || trial_sim_opts_merged === void 0 ? void 0 : trial_sim_opts_merged.simulate) === false))) {
                 load_callback();
             }
             // done with callbacks
@@ -3188,20 +3243,21 @@ var jsPsychModule = (function (exports) {
             for (const param in trial.type.info.parameters) {
                 // check if parameter is complex with nested defaults
                 if (trial.type.info.parameters[param].type === exports.ParameterType.COMPLEX) {
-                    if (trial.type.info.parameters[param].array === true) {
+                    // check if parameter is undefined and has a default value
+                    if (typeof trial[param] === "undefined" && trial.type.info.parameters[param].default) {
+                        trial[param] = trial.type.info.parameters[param].default;
+                    }
+                    // if parameter is an array, iterate over each entry after confirming that there are
+                    // entries to iterate over. this is common when some parameters in a COMPLEX type have
+                    // default values and others do not.
+                    if (trial.type.info.parameters[param].array === true && Array.isArray(trial[param])) {
                         // iterate over each entry in the array
                         trial[param].forEach(function (ip, i) {
                             // check each parameter in the plugin description
                             for (const p in trial.type.info.parameters[param].nested) {
                                 if (typeof trial[param][i][p] === "undefined" || trial[param][i][p] === null) {
                                     if (typeof trial.type.info.parameters[param].nested[p].default === "undefined") {
-                                        console.error("You must specify a value for the " +
-                                            p +
-                                            " parameter (nested in the " +
-                                            param +
-                                            " parameter) in the " +
-                                            trial.type +
-                                            " plugin.");
+                                        console.error(`You must specify a value for the ${p} parameter (nested in the ${param} parameter) in the ${trial.type.info.name} plugin.`);
                                     }
                                     else {
                                         trial[param][i][p] = trial.type.info.parameters[param].nested[p].default;
@@ -3214,11 +3270,7 @@ var jsPsychModule = (function (exports) {
                 // if it's not nested, checking is much easier and do that here:
                 else if (typeof trial[param] === "undefined" || trial[param] === null) {
                     if (typeof trial.type.info.parameters[param].default === "undefined") {
-                        console.error("You must specify a value for the " +
-                            param +
-                            " parameter in the " +
-                            trial.type.info.name +
-                            " plugin.");
+                        console.error(`You must specify a value for the ${param} parameter in the ${trial.type.info.name} plugin.`);
                     }
                     else {
                         trial[param] = trial.type.info.parameters[param].default;
