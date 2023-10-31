@@ -214,9 +214,8 @@ var sss_dimensions = [
 function format_questions_analog(
     items,
     dimensions,
-    ticks = 
     // Response options in English "Inaccurate", "Accurate"
-    ["Неверно", "Верно"]
+    ticks = ["Неверно", "Верно"]
 ) {
     var questions = []
     for (const [index, element] of items.entries()) {
@@ -241,7 +240,7 @@ var ipip6_questionaire = {
     questions: format_questions_analog(ipip6_items, ipip6_dimensions),
     randomize_question_order: false,
     preamble:
-    // About your personality... Please answer the following questions based on how accurately each statement describes you in general.
+        // About your personality... Please answer the following questions based on how accurately each statement describes you in general.
         "<p>Пожалуйста, ответите на следующие вопросы исходя из того, насколько точно каждое утверждение описывает Вас в целом.</p>",
     require_movement: false,
     slider_width: 600,
@@ -275,9 +274,10 @@ var pid5_questionaire = {
     questions: pid_questions,
     randomize_question_order: false,
     preamble:
-    // About yourself... Below is a list of things different people might say about themselves. Please select the response that best describes you.
+        // About yourself... Below is a list of things different people might say about themselves. Please select the response that best describes you.
         "<p>Перед Вами список утверждений, которые разные люди могут использовать для того, чтобы охарактеризовать себя.</p>" +
         "<p>Пожалуйста, выберите ответ, который наилучшим образом описывает Вас.</p>",
+    button_label: "Продолжить",
     require_movement: false,
     slider_width: 700,
     data: {
@@ -309,6 +309,7 @@ var sss_questionaire = {
     preamble:
         "<p><b>About your sensitivity and adaptability...</b></p>" +
         "<p>Please indicate to what extent the following statements apply to you.</p>",
+    button_label: "Продолжить",
     require_movement: false,
     slider_width: 700,
     data: {

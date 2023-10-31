@@ -59,7 +59,7 @@ var jsPsychSurveyLikert = (function (jspsych) {
           button_label: {
               type: jspsych.ParameterType.STRING,
               pretty_name: "Button label",
-              default: "Продолжить",
+              default: "Continue",
           },
           /** Setting this to true will enable browser auto-complete or auto-fill for the form. */
           autocomplete: {
