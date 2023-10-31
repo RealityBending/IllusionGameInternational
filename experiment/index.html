@@ -62,7 +62,8 @@
             on_finish: function () {
                 // Display data in browser (useful for debugging)
                 jsPsych.data.displayData("json")
-                // // Save data based on the participant_id variable that gets created later
+                // // Save data based on the participant_id variable that gets created
+                // // in `demographics_participant_id`
                 // jsPsych.data
                 //     .get()
                 //     .localSave(
@@ -118,7 +119,17 @@
             ],
         }
 
-        timeline.push(illusion_practice_block)
+        // timeline.push(illusion_practice_block)
+
+        // Task Blocks -----------------------------------------------------------------
+
+        // Randomize order of the 2 parts
+        for (var task of jsPsych.randomization.shuffleNoRepeats([
+            IG_create_block(stimuli_part1, (show_marker = false)),
+            IG_create_block(stimuli_part2, (show_marker = false)),
+        ])) {
+            timeline.push(task)
+        }
 
         // End =================================================================
         // Exit fullscreen mode
@@ -128,13 +139,13 @@
         })
 
         // Save data via DataPipe
-        timeline.push({
-            type: jsPsychPipe,
-            action: "save",
-            experiment_id: "KnBMjNNnvXFM", // This in generated in the DataPipe interface
-            filename: `${jsPsych.randomization.randomID(10)}.csv`,
-            data_string: () => jsPsych.data.get().csv(),
-        })
+        // timeline.push({
+        //     type: jsPsychPipe,
+        //     action: "save",
+        //     experiment_id: "KnBMjNNnvXFM", // This in generated in the DataPipe interface
+        //     filename: `${jsPsych.randomization.randomID(10)}.csv`,
+        //     data_string: () => jsPsych.data.get().csv(),
+        // })
 
         /* ----------------- Run the timeline ----------------- */
         jsPsych.run(timeline)

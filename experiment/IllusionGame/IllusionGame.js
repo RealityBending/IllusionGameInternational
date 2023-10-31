@@ -46,6 +46,10 @@ var verticalhorizontal_instructions =
     "<p class='small'>In this example, the correct answer is the <b>LEFT arrow</b>.</p></div>" +
     "<p>Are you ready? <b>Press ENTER to start</b></p>"
 
+function add_blocknumber(instructions, block) {
+    return "<p><b>Part " + block + "/6" + "</b></p>" + instructions
+}
+
 // Math utilities =================================================================================
 function randomInteger(min = 1, max = 10) {
     return Math.round(Math.random() * (max - min) + min)
@@ -75,6 +79,16 @@ function round_digits(x, digits = 2) {
     ).toFixed(digits)
 }
 
+// EEG / Physio trigger
+// [x, y, width, height] in pixels. Set to [0, 0, 0, 0] to disable.
+const marker_position = [0, 0, 100, 100]
+
+function ig_create_marker(marker_position, color = "black") {
+    const html = `<div id="marker" style="position: absolute; background-color: ${color};\
+left:${marker_position[0]}px; top:${marker_position[1]}px; \
+width:${marker_position[2]}px; height:${marker_position[3]}px";></div>`
+    document.querySelector("body").insertAdjacentHTML("beforeend", html)
+}
 // Feedback and Debriefing ========================================================================
 function get_results(illusion_mean, illusion_sd, illusion_type) {
     if (typeof illusion_type != "undefined") {
@@ -195,7 +209,7 @@ function IG_create_trial(
             },
             on_load: function () {
                 if (marker) {
-                    create_marker(marker_position)
+                    ig_create_marker(marker_position)
                 }
             },
             on_finish: function (data) {
@@ -261,7 +275,7 @@ function IG_create_trial(
             },
             on_load: function () {
                 if (marker) {
-                    create_marker(marker_position)
+                    ig_create_marker(marker_position)
                 }
             },
             on_finish: function (data) {
@@ -470,65 +484,57 @@ function create_debrief(illusion_name = "Ponzo") {
     return debrief
 }
 
-function IG_create_block(stimuli, display_block = true) {
+function IG_create_block(
+    stimuli,
+    show_blocknumber = true,
+    show_marker = false
+) {
     /* ---------------------- MULLERLYER ILLUSION --------------------- */
     var timeline_mullerlyer = IG_make_trials(
         stimuli,
-        (instructions = function (display_block) {
-            if (display_block) {
-                return (
-                    "<p><b>Part " +
-                    block_number +
-                    "/6" +
-                    "</b></p>" +
-                    mullerlyer_instructions
-                )
+        (instructions = function (show_blocknumber) {
+            if (show_blocknumber) {
+                return add_blocknumber(mullerlyer_instructions, block_number)
             } else {
                 return mullerlyer_instructions
             }
         }),
         (illusion_name = "MullerLyer"),
-        (type = "updown")
+        (type = "updown"),
+        (marker = show_marker)
     )
 
     /* --------------------- EBBINGHAUS ILLUSION ---------------------- */
     var timeline_ebbinghaus = IG_make_trials(
         stimuli,
-        (instructions = function (display_block) {
-            if (display_block) {
-                return (
-                    "<p><b>Part " +
-                    block_number +
-                    "/6" +
-                    "</b></p>" +
-                    ebbinghaus_instructions
-                )
+        (instructions = function (show_blocknumber) {
+            if (show_blocknumber) {
+                return add_blocknumber(ebbinghaus_instructions, block_number)
             } else {
                 return ebbinghaus_instructions
             }
         }),
         (illusion_name = "Ebbinghaus"),
-        (type = "leftright")
+        (type = "leftright"),
+        (marker = show_marker)
     )
 
     /* ----------------- VERTICAL-HORIZONTAL ILLUSION ----------------- */
     var timeline_verticalhorizontal = IG_make_trials(
         stimuli,
-        (instructions = function (display_block) {
-            if (display_block) {
-                return (
-                    "<p><b>Part " +
-                    block_number +
-                    "/6" +
-                    "</b></p>" +
-                    verticalhorizontal_instructions
+        (instructions = function (show_blocknumber) {
+            if (show_blocknumber) {
+                return add_blocknumber(
+                    verticalhorizontal_instructions,
+                    block_number
                 )
             } else {
                 return verticalhorizontal_instructions
             }
         }),
         (illusion_name = "VerticalHorizontal"),
-        (type = "leftright")
+        (type = "leftright"),
+        (marker = show_marker)
     )
 
     /* ------------------------ Timeline ----------------------------- */
