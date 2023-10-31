@@ -242,6 +242,7 @@ var ipip6_questionaire = {
     preamble:
         // About your personality... Please answer the following questions based on how accurately each statement describes you in general.
         "<p>Пожалуйста, ответите на следующие вопросы исходя из того, насколько точно каждое утверждение описывает Вас в целом.</p>",
+    button_label: "Продолжить",
     require_movement: false,
     slider_width: 600,
     data: {
