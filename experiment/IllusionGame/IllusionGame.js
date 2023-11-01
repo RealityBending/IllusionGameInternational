@@ -6,45 +6,67 @@ var trial_number = 1 // trial indexing variable
 // General instructions
 var IG_instructions = {
     type: jsPsychHtmlButtonResponse,
-    choices: ["Start the practice!"],
+    // choices_eng: "Start the practice!"
+    choices: ["Начать тренировку!"],
     stimulus:
-        "<p><b>Illusion Game</b></p>" +
-        "<p>In this game of speed and reflex, you will need to make <b>visual judgments</b> (for instance, which circle is the biggest, or which line is the longest), as fast and as correctly as possible, while <b>resisting different visual illusions</b>.</p>" +
-        "<p>We are going to start with some examples of all the illusions you will encounter in the game.</p>",
+    // Illusion Game
+        "<p><b>Игра Иллюзий</b></p>" +
+        // instruction_eng: "In this game of speed and reflex, you will need to make visual judgments (for instance, which circle is the biggest, or which line is the longest), as fast and as correctly as possible, while <b>resisting different visual illusions."
+        "<p>В этой игре на скорость реакции Вам нужно будет как можно быстрее и точнее <b>дать визуальную оценку</b> объектам. <br>Например, выбрать, какой круг больше или какая линия длиннее, <b>сопротивляясь эффектам иллюзий.</b></p>" +
+        // instruction_eng: "We are going to start with some examples of all the illusions you will encounter in the game."
+        "<p>Мы начнем с примеров всех иллюзий, которые Вы можете встретить в игре.</p>",
     data: { screen: "IG_instructions" },
 }
 
 // Instructions for Illusion Trials
 
 var mullerlyer_instructions =
-    "<p>In this part, two horizontal red lines will appear one above the other.</p>" +
-    "<p>Your task is to select which <b>line is longer</b> in length as fast as you can, without making errors.</p>" +
-    "<p>Don't get distracted by the surrounding black arrows at the end of the red lines!</p>" +
-    "<p>Press <b>the UP or the DOWN arrow</b> to indicate where is the longer <b>red line.</b></p>" +
+    // instruction_eng: "In this part, two horizontal red lines will appear one above the other"
+    "<p>В этой части тренировки на экране появятся две красные горизонтальные линии, расположенные друг под другом.</p>" +
+    // instruction_eng: "Your task is to select which <b>line is longer</b> in length as fast as you can, without making errors.
+    "<p>Ваша задача - как можно быстрее и без ошибок определить, <b>какая из линий длиннее</b>.</p>" +
+    // instruction_eng: "Don't get distracted by the surrounding black arrows at the end of the red lines!"
+    "<p>Пожалуйста, постарайтесь не обращать внимания на черные стрелки в конце красных линий!</p>" +
+    // instruction_eng: "Press the UP or the DOWN arrow to indicate where is the longer red line"
+    "<p>Нажмите на <b>стрелку ВВЕРХ или ВНИЗ</b> на клавиатуре, чтобы указать, где находится <b>более длинная красная линия.</b></p>" +
     "<div style='float: center'><img src='IllusionGame/images/MullerLyer_Demo.png' height='200'></img>" +
     "<p><img src='IllusionGame/images/answer_updown_keyboard.PNG' height='100'></img></p>" +
-    "<p class='small'>In this example, the correct answer is the <b>UP arrow</b>.</p></div>" +
-    "<p>Are you ready? <b>Press ENTER to start</b></p>"
+    // instruction_eng: "In this example, the correct answer is the UP arrow."
+    "<p class='small'>В этом примере правильный ответ - верхняя линяя, то есть <b>стрелка вверх</b>.</p></div>" +
+    // instruction_eng: "Are you ready? Press ENTER to start."
+    "<p>Вы готовы? <br><b>Нажмите ENTER, чтобы начать.</b><br></p>"
 
 var ebbinghaus_instructions =
-    "<p>In this part, two red circles will appear side by side on the screen.</p>" +
-    "<p>Your task is to select which <b>red circle is bigger</b> in size as fast as you can, without making errors.</p>" +
-    "<p>Don't get distracted by the surrounding black circles around the red circles!</p>" +
-    "<p>Press <b>the LEFT or the RIGHT arrow</b> to indicate which is the bigger <b>red circle.</b></p>" +
+    // instruction_eng: "In this part, two red circles will appear side by side on the screen."
+    "<p>В этой части тренировки на экране появятся два красных круга, расположенные рядом.</p>" +
+    // instruction_eng: "Your task is to select which <b>red circle is bigger</b> in size as fast as you can, without making errors."
+    "<p>Ваша задача - определить как можно быстрее, <b>какой красный круг больше</b>, не допустив ошибку.</p>" +
+    // instruction_eng: "Don't get distracted by the surrounding black circles around the red circles."
+    "<p>Постарайтесь не отвлекаться на черные круги вокруг красных кругов!</p>" +
+    // instruction_eng: "Press <b>the LEFT or the RIGHT arrow</b> to indicate which is the bigger red circle."
+    "<p>Нажмите <b>на ЛЕВУЮ или на ПРАВУЮ стрелку</b> на клавиатуре, чтобы выбрать, <b>какой красный круг больше.</b></p>" +
     "<div style='float: center'><img src='IllusionGame/images/Ebbinghaus_Demo.png' height='200'></img>" +
     "<p><img src='IllusionGame/images/answer_leftright_keyboard.PNG' height='100'></img></p>" +
-    "<p class='small'>In this example, the correct answer is the <b>LEFT arrow</b>.</p></div>" +
-    "<p>Are you ready? <b>Press ENTER to start</b></p>"
+    // instruction_eng: "In this example, the correct answer is the <b>LEFT arrow</b>."
+    "<p class='small'>В этом примере верный ответ - левый круг, то есть <b>левая стрелка</b>).</p></div>" +
+    // instruction_eng: "Are you ready? Press ENTER to start
+    "<p>Вы готовы? <br><b>Нажмите ENTER, чтобы начать.</b><br></p>"
 
 var verticalhorizontal_instructions =
-    "<p>In this part, two red lines will appear side by side.</p>" +
-    "<p>Your task is to tell <b>which line is longer</b> in length, regardless of their orientation, as fast as you can, and without making errors.</p>" +
-    "<p>Don't get distracted by the orientation of the lines!</p>" +
-    "<p>Press <b>the LEFT or the RIGHT arrow</b> to indicate which <b>line is the longer one.</b></p>" +
+    // instruction_eng: "In this part, two red lines will appear side by side."
+    "<p>В этой части тренировки на экране появятся две красные линии, расположенные рядом.</p>" +
+    // instruction_eng: "Your task is to tell <b>which line is longer</b> in length, regardless of their orientation, as fast as you can, and without making errors."
+    "<p>Ваша задача - как можно быстрее и без ошибок определить, <b>какая линяя длиннее</b>, несмотря их расположение.</p>" +
+    // instruction_eng: "Don't get distracted by the orientation of the lines!"
+    "<p>Пожалуйста, пострайтесь не отвлекаться на то, как расположены линии! </p>" +
+    // instruction_eng: "Press <b>the LEFT or the RIGHT arrow</b> to indicate which line is the longer one."
+    "<p>Нажмите <b>на ЛЕВУЮ или на ПРАВУЮ стрелку</b> на клавиатуре, чтобы указать, где находится <b>более длинная линия.</b></p>" +
     "<div style='float: center'><img src='IllusionGame/images/VerticalHorizontal_Demo.png' height='200'></img>" +
     "<p><img src='IllusionGame/images/answer_leftright_keyboard.PNG' height='100'></img></p>" +
-    "<p class='small'>In this example, the correct answer is the <b>LEFT arrow</b>.</p></div>" +
-    "<p>Are you ready? <b>Press ENTER to start</b></p>"
+    // instruction_eng: "In this example, the correct answer is the <b>LEFT arrow</b>."
+    "<p class='small'>В этом примере верный ответ - линия слева, то есть <b>левая стрелка</b>).</p></div>" +
+    // instruction_eng: "Are you ready? Press ENTER to start"
+    "<p>Вы готовы? <br><b>Нажмите ENTER, чтобы начать.</b><br></p>"
 
 function add_blocknumber(instructions, block) {
     return "<p><b>Part " + block + "/6" + "</b></p>" + instructions
@@ -137,7 +159,8 @@ function get_debrief_display(results, type = "Block") {
     } else if (type === "Final") {
         // Final debriefing at end of game
         var score =
-            "<p><strong>Your final score is</strong> " +
+            // Your final score is</strong
+            "<p><strong>Ваш итоговый результат</strong> " +
             '<p style="color: black; font-size: 48px; font-weight: bold;">&#127881; ' +
             Math.round(results.score) +
             " &#127881;</p>"
@@ -146,18 +169,22 @@ function get_debrief_display(results, type = "Block") {
     return {
         display_score: score,
         display_accuracy:
-            "<p style='color:rgb(76,175,80);'> Correct Responses: <b>" +
+            // Correct Responses
+            "<p style='color:rgb(76,175,80);'> Правильные ответы: <b>" +
             round_digits(results.accuracy * 100) +
             "" +
             "%</b></p>",
         display_rt:
-            "<p style='color:rgb(139, 195, 74);'> Average Response Time: <b>" +
+            // Average Response Time
+            "<p style='color:rgb(139, 195, 74);'> Среднее время ответа: <b>" +
             round_digits(results.mean_reaction_time) +
             "</b> ms.</p>",
         display_comparison:
-            "<p style='color:rgb(76,175,80);'>You performed better than <b>" +
+            // You performed better than
+            "<p style='color:rgb(76,175,80);'>Вы справились лучше, чем <b>" +
             round_digits(results.percentage) +
-            "</b>% of the population.</p>",
+            // of the population
+            "</b>% людей.</p>",
     }
 }
 
@@ -383,7 +410,8 @@ function IG_make_trials(
         } else if (stimuli === stimuli_training) {
             timeline.push({
                 type: jsPsychHtmlButtonResponse,
-                choices: ["Continue"],
+                // choices_eng: "Continue"
+                choices: ["Продолжить"],
                 post_trial_gap: 500,
                 on_start: function () {
                     document.body.style.cursor = "auto"
@@ -408,7 +436,8 @@ function IG_make_trials(
 // Practice trials ================================================================================
 var ebbinghaus_practice = IG_make_trials(
     (stimuli = stimuli_training),
-    (instructions = "<p><b>Practice</b></p>" + ebbinghaus_instructions),
+    // instructions_eng: "Practice"
+    (instructions = "<p><b>Тренировка</b></p>" + ebbinghaus_instructions),
     (illusion_name = "Ebbinghaus"),
     (type = "leftright"),
     (marker = false)
@@ -416,7 +445,8 @@ var ebbinghaus_practice = IG_make_trials(
 
 var mullerlyer_practice = IG_make_trials(
     (stimuli = stimuli_training),
-    (instructions = "<p><b>Practice</b></p>" + mullerlyer_instructions),
+    // instructions_eng: "Practice"
+    (instructions = "<p><b>Тренировка</b></p>" + mullerlyer_instructions),
     (illusion_name = "MullerLyer"),
     (type = "updown"),
     (marker = false)
@@ -424,7 +454,8 @@ var mullerlyer_practice = IG_make_trials(
 
 var verticalhorizontal_practice = IG_make_trials(
     (stimuli = stimuli_training),
-    (instructions = "<p><b>Practice</b></p>" + verticalhorizontal_instructions),
+    // instructions_eng: "Practice"
+    (instructions = "<p><b>Тренировка</b></p>" + verticalhorizontal_instructions),
     (illusion_name = "VerticalHorizontal"),
     (type = "leftright"),
     (marker = false)
@@ -432,14 +463,21 @@ var verticalhorizontal_practice = IG_make_trials(
 
 var IG_practice_end = {
     type: jsPsychHtmlButtonResponse,
-    choices: ["Let's Play!"],
+    // choices_eng: "Let's Play"
+    choices: ["Начать игру!"],
     stimulus:
-        "<p><b>TRAINING COMPLETED</b></p>" +
-        "<p>In the next phase, there will be more trials, and some might be harder too.<br> Moreover, after each illusion block, a <b>score</b> will be calculated based on speed (time you took to answer) and accuracy (number of errors).</p>" +
-        "<p><i>Try to keep up a high score!</i></p><br>" +
-        "<p>Note that it can be <i>really</i> challenging at times, so you will need to rely on your <b>intuition</b> and gut feeling to answer as fast as you can without making errors.</p>" +
-        "<p>Each illusion block will be repeated two times (so that you have the opportunity to improve your score), but the order of the blocks is random.</p>" +
-        "<p>Remember, your goal is to be as <b>fast</b> and <b>accurate</b> as possible. Good luck!</p><br>",
+        // instruction_eng: "TRAINING COMPLETED
+        "<p><b>ТРЕНИРОВКА ЗАВЕРШЕНА</b></p>" +
+        // instruction_eng: "In the next phase, there will be more trials, and some might be harder too.<br> Moreover, after each illusion block, a <b>score</b> will be calculated based on speed (time you took to answer) and accuracy (number of errors)."
+        "<p>На следующем этапе игры испытаний будет больше, а некоторые из них могут быть сложнее.<br> Более того, после каждого блока иллюзий Ваш <b>результат</b> будет подсчитан <br>исходя из Вашей скорости (времени, которое Вы затратили на ответы) и точности (количества ошибок).<br></p>" +
+        // instruction_eng: "Try to keep up a high score!"
+        "<p><i>Постарайтесь удержать высокий результат!</i></p><br>" +
+        // instruction_eng: "Note that it can be really challenging at times, so you will need to rely on your intuition and gut feeling to answer as fast as you can without making errors"
+        "<p>Обратите внимание, что иногда может быть <i>очень сложно</i> определить верный ответ. <br>Поэтому Вам придется полагаться на <b>интуицию</b> и ощущения, чтобы ответить как можно быстрее, не допустив ошибки.<br></p>" +
+        // instruction_eng: "Each illusion block will be repeated two times (so that you have the opportunity to improve your score), but the order of the blocks is random."
+        "<p>Каждый блок с иллюзиями будет повторен два раза, чтобы у Вас была возможность улучшить свой результат. <br>Однако порядок блоков будет случаным.<br></p>" +
+        // instruction_eng: "Remember, your goal is to be as <b>fast</b> and <b>accurate</b> as possible. Good luck!"
+        "<p>Помните, Ваша цель - действовать настолько <b>быстро</b> и <b>точно</b>, насколько это возможно. Удачи!</p><br>",
     data: { screen: "practice_debrief" },
     on_finish: function () {
         block_number = 1 // reset block number for illusion trials
@@ -450,7 +488,8 @@ var IG_practice_end = {
 function create_debrief(illusion_name = "Ponzo") {
     var debrief = {
         type: jsPsychHtmlButtonResponse,
-        choices: ["Continue"],
+        // choices_eng: "Continue"
+        choices: ["Продолжить"],
         on_start: function () {
             document.body.style.cursor = "auto"
         },
@@ -471,7 +510,8 @@ function create_debrief(illusion_name = "Ponzo") {
                 // "<hr>" +
                 // //
                 // show_screen.display_comparison +
-                "<hr><p>Can you do better in the next illusion?</p>"
+                // eng: "Can you do better in the next illusion?"
+                "<hr><p>Попробуете справиться лучше со следующей иллюзией?</p>"
             )
         },
         data: { screen: "block_results" },

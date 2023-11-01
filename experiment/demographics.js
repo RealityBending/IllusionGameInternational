@@ -36,8 +36,8 @@ var demographics_participant_id = {
     type: jsPsychSurveyText,
     questions: [
         {
-            // prompt: "Введите номер участника/участницы:",
-            prompt: "Enter participant ID:",
+            // prompt: "Enter participant ID:",
+            prompt: "Введите номер участника/участницы:",
             placeholder: "001",
             name: "Participant_ID",
         },
@@ -66,8 +66,8 @@ var demographics_basic = {
         //     name: "age",
         // },
         {
-            prompt: "Age - RUSSIAN VERSION",
-            placeholder: "RUSSIAN VERSION",
+            prompt: "Укажите, пожалуйста, сколько Вам полных лет:",
+            placeholder: "например, 29",
             name: "age",
         },
         // {
@@ -76,13 +76,15 @@ var demographics_basic = {
         //     name: "gender",
         // },
         {
-            prompt: "Sex - RUSSIAN VERSION",
-            placeholder: "RUSSIAN VERSION",
+            prompt: "Укажите, пожалуйста, Ваш пол:",
+            placeholder: "например, женский",
             name: "gender",
         },
         // {
         //     prompt: "Please enter your ethnicity",
+        //     prompt_ru: "Укажите, пожалуйста, Вашу этническую принадлежность"
         //     placeholder: "e.g., Caucasian",
+        //     placeholder: "например, беларус"
         //     name: "ethnicity",
         // },
         // {

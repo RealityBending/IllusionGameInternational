@@ -11,7 +11,7 @@ var ipip6_items = [
     // I have a vivid imagination
     "У меня богатое воображение",
     // I feel entitled to more of everything
-    "Я считаю, что мне должно доставаться больше, чем то, что я получаю сейчас",
+    "Я считаю, что мне полагается больше, чем то, что я получаю сейчас",
     // I don't talk a lot
     "Я не многословен/многословна",
     // I am not interested in other people's problems
@@ -35,7 +35,7 @@ var ipip6_items = [
     // I seldom feel blue
     "Я редко чувствую себя грустным(ой)",
     // I would like to be seen driving around in a really expensive car
-    "Я бы хотел(а), что бы меня видели за рулем очень дорогой машины",
+    "Мне бы хотелось, что бы меня видели за рулем очень дорогой машины",
     // I keep in the background
     "Я стараюсь оставаться в тени",
     // I am not really interested in others
@@ -47,7 +47,7 @@ var ipip6_items = [
     // I talk to a lot of different people at parties
     "На вечеринках я общаюсь с большим количеством разных людей",
     // I would get a lot of pleasure from owning expensive luxury goods
-    "Я получил(а) бы много удовольствия от владения дорогими предметами роскоши",
+    "Мне бы доставило много удовольствия владеть предметами роскоши",
 ]
 var ipip6_dimensions = [
     "Extraversion_1",
@@ -161,27 +161,48 @@ var pid_dimensions = [
 // Short Suggestibility Scale (SSS  21 items; Kotov, Bellman & Watson, 2004)
 // From the Multidimensional Iowa Suggestibility Scale (MISS)
 var sss_items = [
-    "I am easily influenced by other people's opinions",
-    "I can be influenced by a good commercial",
-    "When someone coughs or sneezes, I usually feel the urge to do the same",
-    "Imagining a refreshing drink can make me thirsty",
-    "A good salesperson can really make me want their product",
-    "I get a lot of good practical advice from magazines or TV",
-    "If a product is nicely displayed, I usually want to buy it",
-    "When I see someone shiver, I often feel a chill myself",
-    "I get my style from certain celebrities",
-    "When people tell me how they feel, I often notice that I feel the same way",
-    "When making a decision, I often follow other people's advice",
-    "Reading descriptions of tasty dishes can make my mouth water",
-    "I get many good ideas from others",
-    "I frequently change my opinion after talking with others",
-    "After I see a commercial for lotion, sometimes my skin feels dry",
-    "I discovered many of my favorite things through my friends",
-    "I follow current fashion trends",
-    "Thinking about something scary can make my heart pound",
-    "I have picked-up many habits from my friends",
-    "If I am told I don't look well, I start feeling ill",
-    "It is important for me to fit in",
+    // I am easily influenced by other people's opinions
+    "На меня легко может повлиять мнение других людей",
+    // I can be influenced by a good commercial
+    "На меня способна повлиять хорошая реклама",
+    // When someone coughs or sneezes, I usually feel the urge to do the same
+    "Обычно, когда кто-то кашляет или чихает, у меня возникает потребность сделать то же самое",
+    // Imagining a refreshing drink can make me thirsty
+    "Я могу ощутить жажду, просто представляя прохладительный напиток",
+    // A good salesperson can really make me want their product
+    "Хороший продавец способен убедить меня в том, что мне нужен его товар",
+    // I get a lot of good practical advice from magazines or TV
+    "Я получаю много полезных и практичных советов из журналов и/или телевизора",
+    // If a product is nicely displayed, I usually want to buy it
+    "Обычно, если товар красиво представлен или упакован, я хочу его купить",
+    // When I see someone shiver, I often feel a chill myself
+    "Когда я вижу, что кто-то дрожит, часто я и сам(а) начинаю ощущать холод",
+    // I get my style from certain celebrities
+    "Я черпаю свой стиль у определенных знаменитостей",
+    // When people tell me how they feel, I often notice that I feel the same way
+    "Когда люди рассказывают мне, что они чувствуют, я нередко замечаю, что чувствую тоже самое",
+    // When making a decision, I often follow other people's advice
+    "Принимая решения, я часто следую советам других людей",
+    // Reading descriptions of tasty dishes can make my mouth water
+    "От описания вкусных блюд у меня текут слюнки",
+    // I get many good ideas from others
+    "Я беру много хороших идей от людей",
+    // I frequently change my opinion after talking with others
+    "Я часто меняю свое мнение после общения с другими людьми",
+    // After I see a commercial for lotion, sometimes my skin feels dry
+    "Иногда, после просмотра рекламы увлажняющего крема, моя кожа ощущается сухой",
+    // I discovered many of my favorite things through my friends
+    "Многое из того, что я люблю, я открыл благодаря друзьям",
+    // I follow current fashion trends
+    "Я следую текущим модным трендам",
+    // Thinking about something scary can make my heart pound
+    "Мысли о чем-то страшном могут заставить мое сердце биться чаще",
+    // I have picked-up many habits from my friends
+    "Я перенял(а) многие привычки друзей",
+    // If I am told I don't look well, I start feeling ill
+    "Если мне сказали, что я выгляжу заболевшей (заболевшим), я начинаю себя так чувствовать",
+    // It is important for me to fit in
+    "Для меня важно вписаться в общество/компанию",
 ]
 
 var sss_dimensions = [
@@ -214,7 +235,7 @@ var sss_dimensions = [
 function format_questions_analog(
     items,
     dimensions,
-    // Response options in English "Inaccurate", "Accurate"
+    // ticks: "Inaccurate", "Accurate"
     ticks = ["Неверно", "Верно"]
 ) {
     var questions = []
@@ -240,7 +261,8 @@ var ipip6_questionaire = {
     questions: format_questions_analog(ipip6_items, ipip6_dimensions),
     randomize_question_order: false,
     preamble:
-        // About your personality... Please answer the following questions based on how accurately each statement describes you in general.
+        // preamble_eng: "About your personality... Please answer the following questions based on how accurately each statement describes you in general."
+        "<p><b>О Вас</b></p>" +
         "<p>Пожалуйста, ответите на следующие вопросы исходя из того, насколько точно каждое утверждение описывает Вас в целом.</p>",
     button_label: "Продолжить",
     require_movement: false,
@@ -257,13 +279,13 @@ for (const [index, element] of pid_items.entries()) {
         prompt: "<b>" + element + "</b>",
         name: pid_dimensions[index],
         labels: [
-            // Very or Often False
+            // label: "Very or Often False"
             "Совершенно неверно или часто неверно",
-            // Sometimes or Somewhat False
+            // label: "Sometimes or Somewhat False"
             "Иногда или в некоторой степени неверно",
-            // Sometimes or Somewhat True
+            // label: "Sometimes or Somewhat True"
             "Иногда или в некоторой степени верно",
-            // Very or Often True
+            // label: "Very or Often True"
             "Совершенно верно или часто верно",
         ],
         required: false,
@@ -276,6 +298,7 @@ var pid5_questionaire = {
     randomize_question_order: false,
     preamble:
         // About yourself... Below is a list of things different people might say about themselves. Please select the response that best describes you.
+        "<p><b>О Вас</b></p>" +
         "<p>Перед Вами список утверждений, которые разные люди могут использовать для того, чтобы охарактеризовать себя.</p>" +
         "<p>Пожалуйста, выберите ответ, который наилучшим образом описывает Вас.</p>",
     button_label: "Продолжить",
@@ -293,11 +316,16 @@ for (const [index, element] of sss_items.entries()) {
         prompt: "<b>" + element + "</b>",
         name: sss_dimensions[index],
         labels: [
-            "Not at all or very slightly",
-            "A little",
-            "Somewhat",
-            "Quite a bit",
-            "A lot",
+            // label: "Not at all or very slightly"
+            "Совсем нет или очень незначительно",
+            // label: "A little"
+            "Немного",
+            // label: "Somewhat"
+            "В некоторой степени",
+            // label: "Quite a bit"
+            "Довольно сильно",
+            // label: "A lot"
+            "Очень сильно",
         ],
         required: false,
     })
@@ -308,8 +336,9 @@ var sss_questionaire = {
     questions: sss_questions,
     randomize_question_order: true,
     preamble:
-        "<p><b>About your sensitivity and adaptability...</b></p>" +
-        "<p>Please indicate to what extent the following statements apply to you.</p>",
+        // preamble_eng: "About your sensitivity and adaptability...Please indicate to what extent the following statements apply to you."
+        "<p><b>О Вашей чувствительности и адаптивности.</b></p>" +
+        "<p>Пожалуйста, выберите, насколько каждое из утверждений соответствует Вам.</p>",
     button_label: "Продолжить",
     require_movement: false,
     slider_width: 700,

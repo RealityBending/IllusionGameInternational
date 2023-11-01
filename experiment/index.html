@@ -81,14 +81,15 @@
             fullscreen_mode: true,
             message:
                 "<p>Исследование перейдет в полноэкранный режим после того, как Вы нажмете на кнопку ниже</p>",
+            //  button_label: "Continue"
             button_label: "Начать",
             delay_after: 0,
         })
 
         // Session and Participant Info ----------------------------------------
         timeline.push(demographics_browser_info)
-        // timeline.push(demographics_participant_id)
-        // timeline.push(demographics_basic)
+        timeline.push(demographics_participant_id)
+        timeline.push(demographics_basic)
 
         // Questionnaires =======================================================
         // Adding some characters in russian to force correct encoding: Введите
@@ -103,36 +104,36 @@
         // Practice ------------------------------------------------------------
 
         // Preload Instructions Stimuli
-        // timeline.push({
-        //     type: jsPsychPreload,
-        //     images: [
-        //         "IllusionGame/images/Ebbinghaus_Demo.png",
-        //         "IllusionGame/images/MullerLyer_Demo.png",
-        //         "IllusionGame/images/VerticalHorizontal_Demo.png",
-        //     ],
-        // })
+        timeline.push({
+            type: jsPsychPreload,
+            images: [
+                "IllusionGame/images/Ebbinghaus_Demo.png",
+                "IllusionGame/images/MullerLyer_Demo.png",
+                "IllusionGame/images/VerticalHorizontal_Demo.png",
+            ],
+        })
 
-        // var illusion_practice_block = {
-        //     timeline: [
-        //         IG_instructions,
-        //         { timeline: ebbinghaus_practice },
-        //         { timeline: mullerlyer_practice },
-        //         { timeline: verticalhorizontal_practice },
-        //         IG_practice_end,
-        //     ],
-        // }
+        var illusion_practice_block = {
+            timeline: [
+                IG_instructions,
+                { timeline: ebbinghaus_practice },
+                { timeline: mullerlyer_practice },
+                { timeline: verticalhorizontal_practice },
+                IG_practice_end,
+            ],
+        }
 
-        // timeline.push(illusion_practice_block)
+        timeline.push(illusion_practice_block)
 
         // Task Blocks -----------------------------------------------------------------
 
         // Randomize order of the 2 parts
-        // for (var task of jsPsych.randomization.shuffleNoRepeats([
-        //     IG_create_block(stimuli_part1, (show_marker = false)),
-        //     IG_create_block(stimuli_part2, (show_marker = false)),
-        // ])) {
-        //     timeline.push(task)
-        // }
+        for (var task of jsPsych.randomization.shuffleNoRepeats([
+            IG_create_block(stimuli_part1, (show_marker = false)),
+            IG_create_block(stimuli_part2, (show_marker = false)),
+        ])) {
+            timeline.push(task)
+        }
 
         // End =================================================================
         // Exit fullscreen mode

@@ -64,7 +64,8 @@ var jsPsychSurveyText = (function (jspsych) {
           button_label: {
               type: jspsych.ParameterType.STRING,
               pretty_name: "Button label",
-              default: "Continue",
+              // default: "Continue",
+              default: "Продолжить",
           },
           /** Setting this to true will enable browser auto-complete or auto-fill for the form. */
           autocomplete: {
