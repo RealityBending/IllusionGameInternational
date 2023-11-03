@@ -268,7 +268,7 @@ var ipip6_questionaire = {
     require_movement: false,
     slider_width: 600,
     data: {
-        screen: "IPIP6",
+        screen: "questionnaire_ipip6",
     },
 }
 
@@ -305,7 +305,7 @@ var pid5_questionaire = {
     require_movement: false,
     slider_width: 700,
     data: {
-        screen: "PID5",
+        screen: "questionnaire_pid5",
     },
 }
 
@@ -343,6 +343,6 @@ var sss_questionaire = {
     require_movement: false,
     slider_width: 700,
     data: {
-        screen: "SSS",
+        screen: "questionnaire_sss",
     },
 }
