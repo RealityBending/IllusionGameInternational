@@ -4,22 +4,22 @@
         <!-- Title shown in tab -->
         <title>Illusion Game</title>
 
-        <!-- Load all necessary plugins -->
-        <script src="jspsych/jspsych.js"></script>
-        <script src="jspsych/plugin-html-keyboard-response.js"></script>
-        <script src="jspsych/plugin-browser-check.js"></script>
-        <script src="jspsych/plugin-html-button-response.js"></script>
-        <script src="jspsych/plugin-fullscreen.js"></script>
-        <script src="jspsych/plugin-survey-text.js"></script>
-        <script src="jspsych/plugin-audio-button-response.js"></script>
-        <script src="jspsych/plugin-canvas-button-response.js"></script>
-        <script src="jspsych/plugin-preload.js"></script>
-        <script src="jspsych/multiple-slider.js"></script>
-        <script src="jspsych/extension-record-video.js"></script>
-        <script src="jspsych/plugin-initialize-camera.js"></script>
-        <script src="jspsych/plugin-survey-likert.js"></script>
-        <script src="jspsych/plugin-image-keyboard-response.js"></script>
-        <script src="jspsych/plugin-survey-multi-choice.js"></script>
+        <!-- Load plugins used in Demographics -->
+        <script src="https://unpkg.com/jspsych@7.3.3"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-browser-check@1.0.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-survey-text@1.0.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-survey-multi-choice@1.0.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-html-button-response@1.0.0"></script>
+
+        <!-- Load plugins used in Questionnaires -->
+        <script src="https://unpkg.com/@jspsych/plugin-survey-likert@1.0.0"></script>
+        <script src="https://realitybending.github.io/JSmisc/jspsych_extensions/plugin-multiple-slider.js"></script>
+
+        <!-- Load plugins used in Illusion Game -->
+        <script src="https://unpkg.com/@jspsych/plugin-fullscreen@1.0.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-preload@1.0.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.0.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.0.0"></script>
 
         <!-- To save data via DataPipe (for online experiments) -->
         <script src="https://unpkg.com/@jspsych-contrib/plugin-pipe@0.3"></script>
@@ -37,7 +37,11 @@
         <script src="https://realitybending.github.io/IllusionGame/v3/instructions_ru.js"></script>
         <script src="https://realitybending.github.io/IllusionGame/v3/IllusionGame.js"></script>
 
-        <link href="jspsych/jspsych.css" rel="stylesheet" type="text/css" />
+        <link
+            href="https://unpkg.com/jspsych@7.3.3/css/jspsych.css"
+            rel="stylesheet"
+            type="text/css"
+        />
         <style>
             /* set canvas to be full screen */
             .jspsych-content {
@@ -77,11 +81,13 @@
             //  button_label: "Continue"
             button_label: "Начать",
             delay_after: 0,
+            on_start: function () {
+                jsPsych.data.addProperties({ language: "Russian" })
+            },
         })
 
         // Session and Participant Info ----------------------------------------
         timeline.push(demographics_browser_info)
-        timeline.push(demographics_participant_id)
         timeline.push(demographics_basic)
 
         // Questionnaires =======================================================
