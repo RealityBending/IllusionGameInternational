@@ -87,21 +87,25 @@
         // Questionnaires =======================================================
         // Adding some characters in russian to force correct encoding: Введите
         var Qs = [ipip6_questionaire, pid5_questionaire]
-        Qs = jsPsych.randomization.shuffle(Qs) // Randomize
-        for (var i = 0; i < Qs.length; i++) {
-            timeline.push(Qs[i]) // Push each element to timeline
-        }
+        Qs = jsPsych.randomization.shuffle(Qs) // Randomize order
+
+        // Start with first questionnaire
+        timeline.push(Qs[0])
 
         // Illusion Game =======================================================
 
-        timeline.push(ig_practice)
         // Randomize order of the 2 parts
-        for (var task of jsPsych.randomization.shuffleNoRepeats([
+        var ig_parts = [
             IG_create_block(stimuli_part1, (show_marker = false)),
             IG_create_block(stimuli_part2, (show_marker = false)),
-        ])) {
-            timeline.push(task)
-        }
+        ]
+        igs = jsPsych.randomization.shuffle(ig_parts)
+
+        // Add to timeline
+        timeline.push(ig_practice)
+        timeline.push(ig_parts[0])
+        timeline.push(Qs[1])
+        timeline.push(ig_parts[1])
 
         // End =================================================================
         // Exit fullscreen mode
