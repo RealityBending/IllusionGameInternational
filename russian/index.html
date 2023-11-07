@@ -121,13 +121,13 @@
         })
 
         // Save data via DataPipe
-        // timeline.push({
-        //     type: jsPsychPipe,
-        //     action: "save",
-        //     experiment_id: "KnBMjNNnvXFM", // This in generated in the DataPipe interface
-        //     filename: `${jsPsych.randomization.randomID(10)}.csv`,
-        //     data_string: () => jsPsych.data.get().csv(),
-        // })
+        timeline.push({
+            type: jsPsychPipe,
+            action: "save",
+            experiment_id: "KnBMjNNnvXFM", // This in generated in the DataPipe interface
+            filename: `${jsPsych.randomization.randomID(10)}.csv`,
+            data_string: () => jsPsych.data.get().csv(),
+        })
 
         /* ----------------- Run the timeline ----------------- */
         jsPsych.run(timeline)
