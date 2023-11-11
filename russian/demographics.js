@@ -96,6 +96,7 @@ var demographics_basic = {
     data: {
         screen: "demographics",
     },
+    button_label: "Продолжить",
 }
 
 var demographics_consent = {
@@ -109,17 +110,17 @@ var demographics_consent = {
         // Informed Consent
         "<h3>Информированное согласие</h3>" +
         // In this study, you will be asked to complete a few questionnaires and perform some tests to see how fast you are. The goal is to study how Humans are impacted by visual illusions.
-        "<p style='margin-left: 80px; margin-right: 75px; text-align: left;'>В рамках данного исследования вам будет предложено заполнить несколько опросников, а также выполнить тесты, направленные на изучение вашей скорости реакций. Цель исследования - изучить влияние визуальных иллюзий на человека. </p>" +
+        "<p style='margin-left: 30%; margin-right: 30%; text-align: left;'>В рамках данного исследования вам будет предложено заполнить несколько опросников, а также выполнить тесты, направленные на изучение вашей скорости реакций. Цель исследования - изучить влияние визуальных иллюзий на человека. </p>" +
         // Your participation in this research will be kept completely confidential. <b>Your responses are entirely anonymous</b>, and no IP address or any identifiers are collected.
-        "<p style='margin-left: 80px; margin-right: 75px; text-align: left;'>Ваше участие в исследовании будет полностью конфиденциальным. <b>Любые ваши ответы будут анонимны.</b> Идентификационные данные, включая IP адреса, не собираются. </p>" +
+        "<p style='margin-left: 30%; margin-right: 30%; text-align: left;'>Ваше участие в исследовании будет полностью конфиденциальным. <b>Любые ваши ответы будут анонимны.</b> Идентификационные данные, включая IP адреса, не собираются. </p>" +
         // Your participation contributes to scientific advancement. <b>By participating, you agree to follow the instructions and provide honest answers.</b> If you do not wish to participate this survey, simply close your browser.
-        "<p style='margin-left: 80px; margin-right: 75px; text-align: left;'>Ваше участие поможет развитию науки и научного знания. <b>Принимая участие, вы соглашаетесь следовать инструкциям и предоставлять честные ответы.</b> Если Вы не желаете участвовать в этом исследовании, пожалуйста, просто закройте ваш браузер.</p>" +
+        "<p style='margin-left: 30%; margin-right: 30%; text-align: left;'>Ваше участие поможет развитию науки и научного знания. <b>Принимая участие, вы соглашаетесь следовать инструкциям и предоставлять честные ответы.</b> Если Вы не желаете участвовать в этом исследовании, пожалуйста, просто закройте ваш браузер.</p>" +
         // "<p>Please note that various checks will be performed to ensure the validity of the data.<br>We reserve the right to return your participation or prorate reimbursement should we detect non-valid responses (e.g., random pattern of answers, instructions not read, ...).</p>"
         // If you have any questions about the project, please contact D.Makowski@sussex.ac.uk. This project has been reviewed and approved by the Ethics Committee of the University of Sussex (XXXX).
-        "<p style='margin-left: 80px; margin-right: 75px; text-align: left;'><br><sub><sup>Если у Вас возникнут любые вопросы об исследовании, пожалуйста, свяжитесь с нами по адресу D.Makowski@sussex.ac.uk. Данное исследование было рассмотрено и одобрено этическим комитетом университета Сассекса (XXXX).</sup></sub></p>",
+        "<p style='margin-left: 30%; margin-right: 30%; text-align: left;'><br><sub><sup>Если у Вас возникнут любые вопросы об исследовании, пожалуйста, свяжитесь с нами по адресу D.Makowski@sussex.ac.uk. Данное исследование было рассмотрено и одобрено этическим комитетом университета Сассекса (XXXX).</sup></sub></p>",
 
     choices:
-    // choices: "I read and consent"
-     ["Я прочитал(а) и даю согласие"],
+        // choices: "I read and consent"
+        ["Я прочитал(а) и даю согласие"],
     data: { screen: "consent" },
 }
