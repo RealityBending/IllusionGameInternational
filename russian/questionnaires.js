@@ -15,7 +15,7 @@ var ipip6_items = [
     // I don't talk a lot
     "Я не многословен/многословна",
     // I am not interested in other people's problems
-    "Мне не интересны проблемы других людей",
+    "Меня не волнуют проблемы других людей",
     // I have difficulty understanding abstract ideas
     "Мне трудно понимать абстрактные идеи",
     // I like order
@@ -27,7 +27,7 @@ var ipip6_items = [
     // I do not have a good imagination
     "У меня не очень хорошее воображение",
     // I feel others' emotions
-    "Я чувствую эмоции других людей",
+    "Я ощущаю эмоции других людей",
     // I am relaxed most of the time
     "Большую часть времени я расслаблен",
     // I get upset easily
@@ -262,8 +262,8 @@ var ipip6_questionaire = {
     randomize_question_order: false,
     preamble:
         // preamble_eng: "About your personality... Please answer the following questions based on how accurately each statement describes you in general."
-        "<p><b>О Вас</b></p>" +
-        "<p>Пожалуйста, ответите на следующие вопросы исходя из того, насколько точно каждое утверждение описывает Вас в целом.</p>",
+        "<p><b>О вас</b></p>" +
+        "<p>Пожалуйста, ответите на следующие вопросы исходя из того, насколько точно каждое утверждение описывает вас в целом.</p>",
     button_label: "Продолжить",
     require_movement: false,
     slider_width: 600,
@@ -298,9 +298,9 @@ var pid5_questionaire = {
     randomize_question_order: false,
     preamble:
         // About yourself... Below is a list of things different people might say about themselves. Please select the response that best describes you.
-        "<p><b>О Вас</b></p>" +
-        "<p>Перед Вами список утверждений, которые разные люди могут использовать для того, чтобы охарактеризовать себя.</p>" +
-        "<p>Пожалуйста, выберите ответ, который наилучшим образом описывает Вас.</p>",
+        "<p><b>О вас</b></p>" +
+        "<p>Перед вами список утверждений, которые разные люди могут использовать для того, чтобы охарактеризовать себя.</p>" +
+        "<p>Пожалуйста, выберите ответ, который наилучшим образом описывает вас.</p>",
     button_label: "Продолжить",
     require_movement: false,
     slider_width: 700,
@@ -337,8 +337,8 @@ var sss_questionaire = {
     randomize_question_order: true,
     preamble:
         // preamble_eng: "About your sensitivity and adaptability...Please indicate to what extent the following statements apply to you."
-        "<p><b>О Вашей чувствительности и адаптивности.</b></p>" +
-        "<p>Пожалуйста, выберите, насколько каждое из утверждений соответствует Вам.</p>",
+        "<p><b>О вашей чувствительности и адаптивности.</b></p>" +
+        "<p>Пожалуйста, выберите, насколько каждое из утверждений соответствует вам.</p>",
     button_label: "Продолжить",
     require_movement: false,
     slider_width: 700,
