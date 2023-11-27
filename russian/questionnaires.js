@@ -29,13 +29,13 @@ var ipip6_items = [
     // I feel others' emotions
     "Я ощущаю эмоции других людей",
     // I am relaxed most of the time
-    "Большую часть времени я расслаблен",
+    "Большую часть времени я расслаблен(а)",
     // I get upset easily
     "Меня легко расстроить",
     // I seldom feel blue
     "Я редко чувствую себя грустным(ой)",
     // I would like to be seen driving around in a really expensive car
-    "Мне бы хотелось, что бы меня видели за рулем очень дорогой машины",
+    "Мне бы хотелось, чтобы меня видели за рулем очень дорогой машины",
     // I keep in the background
     "Я стараюсь оставаться в тени",
     // I am not really interested in others
@@ -184,7 +184,7 @@ var sss_items = [
     // When making a decision, I often follow other people's advice
     "Принимая решения, я часто следую советам других людей",
     // Reading descriptions of tasty dishes can make my mouth water
-    "От описания вкусных блюд у меня текут слюнки",
+    "От описания вкусных блюд у меня разгорается аппетит",
     // I get many good ideas from others
     "Я беру много хороших идей от людей",
     // I frequently change my opinion after talking with others
