@@ -20,7 +20,7 @@ var demographics_browser_info = {
         data["language"] = urlvars["lang"]
     },
     inclusion_function: (data) => {
-        return data.mobile === false
+        return data.mobile == false
     },
     exclusion_message: (data) => {
         if (data.mobile) {
