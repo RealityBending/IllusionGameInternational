@@ -19,6 +19,14 @@ var demographics_browser_info = {
         data["researcher"] = urlvars["exp"]
         data["language"] = urlvars["lang"]
     },
+    inclusion_function: (data) => {
+        return data.mobile === false
+    },
+    exclusion_message: (data) => {
+        if (data.mobile) {
+            return "<p><b>This experiment is not available on mobile due to screen size restrictions.</b><br>Please return on tablet or computer.</p> "
+        }
+    },
 }
 
 var demographics_basic = {
