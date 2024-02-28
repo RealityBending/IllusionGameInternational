@@ -37,7 +37,7 @@ var ipip6_items = [
     // I would like to be seen driving around in a really expensive car
     "Мне бы хотелось, чтобы меня видели за рулем очень дорогой машины",
     // I keep in the background
-    "Я стараюсь оставаться в тени",
+    "Я стараюсь не выделяться",
     // I am not really interested in others
     "Меня не очень интересуют другие люди",
     // I am not interested in abstract ideas
@@ -45,9 +45,9 @@ var ipip6_items = [
     // I often forget to put things back in their proper place
     "Я часто забываю положить вещи на место",
     // I talk to a lot of different people at parties
-    "На вечеринках я общаюсь с большим количеством разных людей",
+    "На вечеринках я общаюсь с множеством разных людей",
     // I would get a lot of pleasure from owning expensive luxury goods
-    "Мне бы доставило много удовольствия владеть предметами роскоши",
+    "Мне бы доставило много удовольствия владеть дорогими предметами роскоши",
 ]
 var ipip6_dimensions = [
     "Extraversion_1",
@@ -262,8 +262,7 @@ var ipip6_questionaire = {
     randomize_question_order: false,
     preamble:
         // preamble_eng: "About your personality... Please answer the following questions based on how accurately each statement describes you in general."
-        "<p><b>О вас</b></p>" +
-        "<p>Пожалуйста, ответите на следующие вопросы исходя из того, насколько точно каждое утверждение описывает вас в целом.</p>",
+        "<p>Пожалуйста, ответьте на следующие вопросы исходя из того, насколько точно каждое утверждение описывает вас в общем.</p>",
     button_label: "Продолжить",
     require_movement: false,
     slider_width: 600,
@@ -298,7 +297,6 @@ var pid5_questionaire = {
     randomize_question_order: false,
     preamble:
         // About yourself... Below is a list of things different people might say about themselves. Please select the response that best describes you.
-        "<p><b>О вас</b></p>" +
         "<p>Перед вами список утверждений, которые разные люди могут использовать для того, чтобы охарактеризовать себя.</p>" +
         "<p>Пожалуйста, выберите ответ, который наилучшим образом описывает вас.</p>",
     button_label: "Продолжить",
