@@ -3,17 +3,17 @@ var ipip6_items = [
     // I am the life of the party
     "Я - душа любой вечеринки",
     // I sympathise with others' feelings
-    "Я сопереживаю эмоциям других людей",
+    "Я сопереживаю чувствам других людей",
     // I get chores done right away
-    "Я сразу выполняю домашние дела",
+    "Я выполняю повседневные дела без промедлений",
     // I have frequent mood swings
     "Мое настроение часто меняется",
     // I have a vivid imagination
     "У меня богатое воображение",
     // I feel entitled to more of everything
-    "Я считаю, что мне полагается больше, чем то, что я получаю сейчас",
+    "Я чувствую, что я вправе получать больше, чем то, что мне дается сейчас",
     // I don't talk a lot
-    "Я не многословен/многословна",
+    "Я не говорю много",
     // I am not interested in other people's problems
     "Меня не волнуют проблемы других людей",
     // I have difficulty understanding abstract ideas
@@ -21,15 +21,15 @@ var ipip6_items = [
     // I like order
     "Я люблю порядок",
     // I make a mess of things
-    "Я устраиваю беспорядок",
+    "Я устраиваю бардак",
     // I deserve more things in life
     "Я заслуживаю большего в жизни",
     // I do not have a good imagination
     "У меня не очень хорошее воображение",
     // I feel others' emotions
-    "Я ощущаю эмоции других людей",
+    "Я чувствую эмоции других людей",
     // I am relaxed most of the time
-    "Большую часть времени я расслаблен(а)",
+    "Большую часть времени я спокоен/спокойна",
     // I get upset easily
     "Меня легко расстроить",
     // I seldom feel blue
@@ -47,7 +47,7 @@ var ipip6_items = [
     // I talk to a lot of different people at parties
     "На вечеринках я общаюсь с множеством разных людей",
     // I would get a lot of pleasure from owning expensive luxury goods
-    "Мне бы доставило много удовольствия владеть дорогими предметами роскоши",
+    "Мне бы принесло много удовольствия обладать дорогими эксклюзивными и статусными вещами",
 ]
 var ipip6_dimensions = [
     "Extraversion_1",
