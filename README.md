@@ -7,6 +7,6 @@ Replication of [Makowski et al. (2022)](https://github.com/RealityBending/Illusi
 
 ## Try the experiment
 
-- [**Russian**](https://realitybending.github.io/IllusionGameInternational/experiment/russian)
+- [**Russian**](https://realitybending.github.io/IllusionGameInternational/experiment/russian.html?exp=readme)
 
 
