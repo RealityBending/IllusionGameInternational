@@ -58,7 +58,7 @@ for i, file in enumerate(files):
         },
         index=[0],
     )
-    
+
     # Demographics --------------------------------------------------------
     demo = data[data["screen"] == "demographics"].iloc[0]
     demo = json.loads(demo["response"])
@@ -66,12 +66,12 @@ for i, file in enumerate(files):
     # Age
     df["Age"] = demo["age"]
 
-    #Gender
+    # Gender
     gender = demo["gender"]
     gender = "Male" if gender in ["мужской", "м", "муж", "Муржской"] else "Female"
-    
+
     df["Gender"] = gender
-    
+
     # Country
     country = demo["Country"]
     country = "Russia" if country in ["Россия"] else country
@@ -80,22 +80,47 @@ for i, file in enumerate(files):
     country = "Germany" if country in ["Германия"] else country
     country = "Kazakhstan" if country in ["Казахстан"] else country
     country = "Belarus" if country in ["Беларусь"] else country
-    
+
     df["Country"] = country
-    
+
     # Nationality
     nationality = demo["nationality"]
-    nationality = "Russian" if nationality in ["русский", "русская", "россиянин", "россиянка", "Русский", "Русская", "Россия"] else nationality
+    nationality = (
+        "Russian"
+        if nationality
+        in [
+            "русский",
+            "русская",
+            "россиянин",
+            "россиянка",
+            "Русский",
+            "Русская",
+            "Россия",
+        ]
+        else nationality
+    )
     nationality = "Georgian" if nationality in ["грузин", "грузинка"] else nationality
-    nationality = "Ukrainian" if nationality in ["украинец", "украинка", "Украинец", "Украинка"] else nationality
-    nationality = "Kazakh" if nationality in ["казах", "казашка", "Казах", "Казашка"] else nationality
-    nationality = "Belarusian" if nationality in ["белорус", "белоруска", "Белорус", "Белоруска" ] else nationality
-    
+    nationality = (
+        "Ukrainian"
+        if nationality in ["украинец", "украинка", "Украинец", "Украинка"]
+        else nationality
+    )
+    nationality = (
+        "Kazakh"
+        if nationality in ["казах", "казашка", "Казах", "Казашка"]
+        else nationality
+    )
+    nationality = (
+        "Belarusian"
+        if nationality in ["белорус", "белоруска", "Белорус", "Белоруска"]
+        else nationality
+    )
+
     # Assign NaN if nationality is an empty string
     nationality = np.nan if nationality in [""] else nationality
-    
+
     df["Nationality"] = nationality
-    
+
     # Questionnaires =====================================================
     # PID-5 --------------------------------------------------------------
     pid5 = data[data["screen"] == "questionnaire_pid5"].iloc[0]
@@ -105,12 +130,12 @@ for i, file in enumerate(files):
     pid5 = json.loads(pid5["response"])
     for item in pid5:
         df["PID5_" + item] = pid5[item]
-    
+
     # IPIP6 --------------------------------------------------------------
     ipip6 = data[data["screen"] == "questionnaire_ipip6"].iloc[0]
-    
+
     df["IPIP6_Duration"] = ipip6["rt"] / 1000 / 60
-    
+
     ipip6 = json.loads(ipip6["response"])
     for item in ipip6:
         df["IPIP6_" + item] = ipip6[item]
@@ -144,9 +169,7 @@ for i, file in enumerate(files):
     alldata_ig = pd.concat([alldata_ig, df_ig], axis=0, ignore_index=True)
 
 # Remove columns =========================================================
-alldata = alldata.drop(
-    columns=["Browser", "Platform", "Screen_Width", "Screen_Height", "Time", "Date_OSF"]
-)
+alldata = alldata.drop(columns=["Platform", "Date_OSF"])
 
 # Save data ==============================================================
 alldata.to_csv("../data/rawdata.csv", index=False)
