@@ -244,7 +244,7 @@ function format_questions_analog(
             prompt: "<b>" + element + "</b>",
             name: dimensions[index],
             ticks: ticks,
-            required: false,
+            required: true,
             min: 0,
             max: 1,
             step: 0.01,
@@ -254,7 +254,7 @@ function format_questions_analog(
     return questions
 }
 
-// IPIP
+// IPIP6
 var ipip6_questionaire = {
     type: jsPsychMultipleSlider,
     // This function is loaded in RestingState.js
@@ -264,14 +264,14 @@ var ipip6_questionaire = {
         // preamble_eng: "About your personality... Please answer the following questions based on how accurately each statement describes you in general."
         "<p>Пожалуйста, ответьте на следующие вопросы исходя из того, насколько точно каждое утверждение описывает вас в общем.</p>",
     button_label: "Продолжить",
-    require_movement: false,
+    require_movement: true,
     slider_width: 600,
     data: {
         screen: "questionnaire_ipip6",
     },
 }
 
-// PID
+// PID5
 var pid_questions = []
 for (const [index, element] of pid_items.entries()) {
     pid_questions.push({
@@ -287,7 +287,7 @@ for (const [index, element] of pid_items.entries()) {
             // label: "Very or Often True"
             "Совершенно верно или часто верно",
         ],
-        required: false,
+        required: true,
     })
 }
 
@@ -300,7 +300,7 @@ var pid5_questionaire = {
         "<p>Перед вами список утверждений, которые разные люди могут использовать для того, чтобы охарактеризовать себя.</p>" +
         "<p>Пожалуйста, выберите ответ, который наилучшим образом описывает вас.</p>",
     button_label: "Продолжить",
-    require_movement: false,
+    require_movement: true,
     slider_width: 700,
     data: {
         screen: "questionnaire_pid5",
