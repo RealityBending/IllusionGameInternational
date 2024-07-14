@@ -30,7 +30,6 @@
 
         <!-- Load Illusion Game scripts -->
         <script src="https://realitybending.github.io/IllusionGame/v3/stimuli/stimuli_training.js"></script>
-        <script src="https://realitybending.github.io/IllusionGame/v3/stimuli/stimuli_training.js"></script>
         <script src="https://realitybending.github.io/IllusionGame/v3/stimuli/stimuli_part1.js"></script>
         <script src="https://realitybending.github.io/IllusionGame/v3/stimuli/stimuli_part2.js"></script>
         <script src="https://realitybending.github.io/IllusionGame/v3/instructions_ru.js"></script>
@@ -131,11 +130,13 @@
             type: jsPsychFullscreen,
             fullscreen_mode: false,
         })
+
         timeline.push(
             demographics_endscreen(
                 "https://realitybending.github.io/IllusionGameInternational/experiment/russian.html?exp=fexp"
             )
         )
+
         /* ----------------- Run the timeline ----------------- */
         jsPsych.run(timeline)
     </script>
