@@ -1,4 +1,4 @@
-// Retrieve and save browser info ========================================================
+// Retrieve and save browser info =====================================================
 var demographics_browser_info = {
     type: jsPsychBrowserCheck,
     data: {
@@ -13,9 +13,8 @@ var demographics_browser_info = {
         data["screen_height"] = dat["height"]
         data["screen_width"] = dat["width"]
 
-        // Add URL variables - ?sona_id=x&exp=1
+        // Add URL variables
         let urlvars = jsPsych.data.urlVariables()
-        data["sona_id"] = urlvars["sona_id"]
         data["researcher"] = urlvars["exp"]
         data["language"] = urlvars["lang"]
     },
@@ -24,34 +23,31 @@ var demographics_browser_info = {
     },
     exclusion_message: (data) => {
         if (data.mobile) {
-            return // This experiment is not available on mobile due to screen size restrictions.</b><br>Please return on laptop or computer."
-            "<p><b> Данное исследование не адаптировано под мобильные устройства.</b><br>Пожалуйста, используйте ноутбук или компьютер.</p> "
+            return "<p><b> Данное исследование не адаптировано под мобильные устройства. </b><br>Пожалуйста, используйте ноутбук или компьютер.</p>"; 
         }
+        // This experiment is not available on mobile due to screen size restrictions. Please return on laptop or computer.
     },
 }
 
+// Demographic info ====================================================================
 var demographics_basic = {
     type: jsPsychSurveyText,
     questions: [
-        // {
         //     prompt: "Please enter your age (in years)",
         //     placeholder: "e.g., '31'",
-        //     name: "age",
-        // },
         {
             prompt: "Укажите, пожалуйста, ваш возраст:",
             placeholder: "например, 31",
             name: "age",
+            required: true,
         },
-        // {
         //     prompt: "Please enter your gender",
         //     placeholder: "e.g., Female",
-        //     name: "gender",
-        // },
         {
             prompt: "Укажите, пожалуйста, ваш пол:",
             placeholder: "например, женский",
             name: "gender",
+            required: true,
         },
         // prompt: "Please enter your nationality",
         // placeholder: "e.g., Caucasian",
@@ -59,27 +55,24 @@ var demographics_basic = {
             prompt: "Укажите, пожалуйста, вашу национальность:",
             placeholder: "например, беларус",
             name: "nationality",
+            required: true,
         },
         // prompt: "In which country do you currently live?",
         // placeholder: "e.g., Republic of Belarus",
-        // name: "Country",
         {
             prompt: "Укажите, пожалуйста, текущую страну вашего проживания:",
             placeholder: "например, Беларусь",
             name: "Country",
+            required: true,
         },
-        // {
-        //     prompt: "English level",
-        //     placeholder: "native, fluent, intermediate, beginner",
-        //     name: "english",
-        // },
     ],
     data: {
         screen: "demographics",
     },
-    button_label: "Продолжить",
+    button_label: "Продолжить", // button_label: "continue"
 }
 
+// Consent form ========================================================================
 var demographics_consent = {
     type: jsPsychHtmlButtonResponse,
     css_classes: ["narrow-text"],
@@ -133,3 +126,49 @@ var demographics_consent = {
     choices: ["Я подтверждаю, что данное информационное согласие было мною прочитано, изложенный текст понятен. Я подтверждаю свою готовность принять участие в исследовании."],
     data: { screen: "consent" },
 }
+//  Demographics Wait Data Saving Screen =============================================
+var demographics_waitdatasaving = {
+    type: jsPsychHtmlButtonResponse,
+    stimulus:
+        // Done! (Russian version: The experiment is complete!)
+        "<h2>Исследование завершено!</h2>"+
+        //now click on 'Continue' and <b>wait until your responses have been successfully saved</b> before closing the tab. (Russian version: Please click the 'Continue' button and wait while your responses are being saved. This will take less than a minute.)
+        "<p>Пожалуйста, нажмите на кнопку \"Продолжить\" и подождите, пока ваши ответы будут сохранены. Это займет меньше минуты.</p>",
+    choices: ["Продолжить"], // button_label: "continue"
+    data: { screen: "waitdatasaving" },
+};
+// Endscreen ==========================================================================
+var demographics_endscreen = function (
+    link = "https://realitybending.github.io/IllusionGameInternational/experiment/russian.html?exp=fexp"
+) {
+    return {
+        type: jsPsychHtmlButtonResponse,
+        css_classes: ["narrow-text"],
+        stimulus: function () {
+            let text =
+                // Thank you for participating
+                "<h3>Благодарим за участие!</h3>" +
+                // >We know participating in scientific experiments can be long and not always the most fun, so we really do appreciate your help in helping us understand how the Human brain works.
+                "<p style='text-align: left; margin-left: 7%; margin-right: 4%;'>Мы понимаем, что участие в научных исследованиях может быть длительным и не очень увлекательным занятием. Мы искренне благодарны, что вы нашли время и силы пройти это исследование и помогаете нам глубже изучить особенности работы человеческого мозга и психики.</p>" +
+                // Information
+                "<h4>Информация об исследовании</h4>" +
+                //The purpose of this study was for us to understand how Humans perceive visual illusions, and whether this relates to personality traits. Hence, this study included the Illusion Game, which measures how people's vision is biased by illusions, as well as various questionnaires that might be related. Russian version of the last sentence: The illusion game included in this study allows us to measure susceptibility/resistance to the effects of illusions, and the questionnaires help identify potential personality traits associated with this.
+                "<p style='text-align: left; margin-left: 7%; margin-right: 5%;'>Цель этого исследования - понять, как люди воспринимают визуальные иллюзии, а также изучить, существует ли взаимосвязь между восприятием иллюзий и личностными чертами. Игра иллюзий, включенная в это исследование, позволяет нам измерить восприимчивость/устойчивость к эффектам иллюзий, а опросники помогают выявить возможные личностные черты, связанные с этим.</p>" +
+                // If you have any questions about the project, please contact <i>D.Makowski@sussex.ac.uk</i>, and check-out the <b><a href='https://realitybending.github.io/'>Reality Bending Lab</a></b> for more information about our research team and projects. For questions in Russian, please use the email yana.degtyareva.psy@gmail.com.
+                "<p style='text-align: left; margin-left: 7%; margin-right: 5%;'>Если у вас есть вопросы об исследовании, пожалуйста, свяжитесь с <i>D.Makowski@sussex.ac.uk</i> и посетите сайт лаборатории <b><a href='https://realitybending.github.io/'>Reality Bending Lab</a></b>, чтобы узнать больше о нашей исследовательской группе и проектах. Для вопросов на русском языке, пожалуйста, используйте почту <i>yana.degtyareva.psy@gmail.com</i>.</p>" +
+                // Don't hesitate to share the study by sending this link. (Russian version:We would appreciate it if you decide to share the link to this study with others.)
+                "<p style='text-align: center; margin-left: 7%; margin-right: 5%;'>Мы будем рады, если вы решите поделиться с другими людьми ссылкой на это исследование:</p>" +
+                "<p><b><a href='" +
+                link +
+                "'>" +
+                link +
+                "<a/></b></p>" +
+                // You can close the tab now. Thank you very much.
+                "<p style='text-align: center; margin-left: 10%; margin-right: 7%;'>Теперь вы можете закрыть эту вкладку. Большое вам спасибо.</b></p>";
+
+            return text;
+        },
+        choices: ["Завершить"], // button_label: "End"
+        data: { screen: "endscreen" },
+    };
+};
