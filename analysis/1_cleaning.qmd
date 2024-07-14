@@ -1,0 +1,513 @@
+---
+title: "IllusionGameSuggestibility - Data Cleaning"
+editor: source
+editor_options: 
+  chunk_output_type: console
+format:
+  html:
+    code-fold: true
+    self-contained: true
+    toc: true
+---
+
+## Data Preparation
+
+```{r}
+#| message: false
+#| warning: false
+
+library(tidyverse)
+library(easystats)
+library(patchwork)
+library(ggside)
+```
+
+
+```{r}
+#| code-fold: false
+
+dfsub <- read.csv("../data/rawdata_participants.csv") |> 
+   mutate(across(everything(), ~ifelse(.x == "", NA, .x))) 
+df <- read.csv("../data/rawdata_IllusionGame.csv") |> 
+  group_by(Illusion_Type) |> 
+  mutate(Illusion_Effect = ifelse(sign(Illusion_Strength) > 0, "Incongruent", "Congruent"),
+         Task_Difficulty = abs(Illusion_Difference),
+         Condition_Illusion = datawizard::categorize(
+           Illusion_Strength, split="quantile", n_groups=4,
+           labels=c("Congruent - Strong", "Congruent - Mild", "Incongruent - Mild", "Incongruent - Strong")),
+         Condition_Difficulty = datawizard::categorize(Task_Difficulty, split="quantile", n_groups=2, labels=c("Hard", "Easy"))) |> 
+  ungroup()
+```
+
+The initial sample consisted of `r report::report_participants(dfsub, age="Age", gender="Gender", education="Education")`, for a total trial number of `r nrow(df)`.
+
+### Score Computation
+
+#### IPIP6
+
+```{r}
+SD_per_dim <- function(x, dims="") {
+  m <- matrix(nrow=nrow(x), ncol=0)
+  for(s in dims) {
+    m <- cbind(m, sapply(as.data.frame(t(x[grepl(s, names(x))])), sd))
+  }
+  m
+}
+```
+```{r}
+#| code-fold: false
+
+ipip6 <- select(dfsub, starts_with("IPIP6_"), -IPIP6_Duration, -IPIP6_Order)
+ipip6[grepl("_R", names(ipip6))] <- 1 - ipip6[grepl("_R", names(ipip6))]
+
+dfsub$IPIP6_Extraversion <- rowMeans(ipip6[grepl("Extraversion", names(ipip6))])
+dfsub$IPIP6_Conscientiousness <- rowMeans(ipip6[grepl("Conscientiousness", names(ipip6))])
+dfsub$IPIP6_Neuroticism <- rowMeans(ipip6[grepl("Neuroticism", names(ipip6))])
+dfsub$IPIP6_Openness <- rowMeans(ipip6[grepl("Openness", names(ipip6))])
+dfsub$IPIP6_HonestyHumility <- rowMeans(ipip6[grepl("HonestyHumility", names(ipip6))])
+dfsub$IPIP6_Agreeableness <- rowMeans(ipip6[grepl("Agreeableness", names(ipip6))])
+dfsub$IPIP6_SD <- rowMeans(SD_per_dim(ipip6, c("Extraversion", "Conscientiousness", "Neuroticism",
+                                               "Openness", "HonestyHumility", "Agreeableness")))
+```
+
+#### PID-5
+
+```{r}
+#| code-fold: false
+
+pid5 <- select(dfsub, starts_with("PID5_"), -PID5_Duration, -PID5_Order)
+
+dfsub$PID5_Disinhibition <- rowMeans(pid5[grepl("Disinhibition", names(pid5))])
+dfsub$PID5_Detachment <- rowMeans(pid5[grepl("Detachment", names(pid5))])
+dfsub$PID5_NegativeAffect <- rowMeans(pid5[grepl("NegativeAffect", names(pid5))])
+dfsub$PID5_Antagonism <- rowMeans(pid5[grepl("Antagonism", names(pid5))])
+dfsub$PID5_Psychoticism <- rowMeans(pid5[grepl("Psychoticism", names(pid5))])
+dfsub$PID5_SD <- rowMeans(SD_per_dim(pid5, c("Disinhibition", "Detachment", "NegativeAffect",
+                                             "Antagonism", "Psychoticism")))
+```
+
+#### SSS
+
+```{r}
+#| code-fold: false
+
+sss <- select(dfsub, starts_with("SSS_"), -SSS_Duration, -SSS_Order)
+
+dfsub$SSS_General <- rowMeans(sss / 4)
+
+dfsub$SSS_SD <- rowMeans(SD_per_dim(sss, c("SSS")))
+```
+
+#### MIST-16
+
+From Maertens et al. (2023): *"We recommend to calculate and report all five scores of the Verification done framework"*:
+
+  - V (Veracity Discernment): V can be calculated by scoring each of the responses on a binary 0 (incorrect) or 1 (correct) metric and taking the sum of the score.
+  - r (Real News Detection): The sum of all scores for the real news items results in the r score.
+  - f (Fake News Detection): The sum of all scores for the fake news items results in the f score.
+  - d (Distrust): To calculate d, all responses must be scored on a binary 0 (not fake news) or 1 (fake news) metric, independent of whether the response is correct or incorrect. The sum of this amount of fake news judgements should then be subtracted by 10 (MIST-20), 8 (MIST-16), or 4 (MIST-8), and this results in the distrust score. If the resulting score is below 0, the score should be corrected to 0.
+  - n (Naïvité): To calculate n, all responses must be scored on a binary 0 (not real news) or 1 (real news), independent of whether the response is correct or incorrect. The sum of this amount of real news judgements should then be subtracted by 10 (MIST-20), 8 (MIST-16), or 4 (MIST-8), and this results in the naïvité score. If the resulting score is below 0, the score should be corrected to 0.
+
+```{r}
+#| code-fold: false
+
+mist <- select(dfsub, starts_with("MIST_"), -MIST_Duration, -MIST_Order)
+
+dfsub$MIST_RealDetection <- rowSums(mist[grepl("Real", names(mist))])
+dfsub$MIST_FakeDetection <- rowSums(mist[grepl("Fake", names(mist))] == 0)
+dfsub$MIST_Discernment <- dfsub$MIST_RealDetection + dfsub$MIST_FakeDetection
+dfsub$MIST_Distrust <- rowSums(mist == 0) - 8
+dfsub$MIST_Naivete <- rowSums(mist) - 8
+```
+
+### Recruitment History
+
+```{r}
+#| message: false
+
+# Consecutive count of participants per day (as area)
+dfsub |>
+  mutate(Date = as.Date(Date, format = "%d/%m/%Y")) |> 
+  group_by(Date, Experimenter) |> 
+  summarize(N = n()) |> 
+  ungroup() |>
+  complete(Date, Experimenter, fill = list(N = 0)) |> 
+  group_by(Experimenter) |>
+  mutate(N = cumsum(N)) |>
+  ggplot(aes(x = Date, y = N)) +
+  geom_area(aes(fill=Experimenter)) +
+  scale_y_continuous(expand = c(0, 0)) +
+  labs(
+    title = "Recruitment History",
+    x = "Date",
+    y = "Total Number of Participants"
+  ) +
+  see::theme_modern()
+```
+
+### Experiment Duration
+
+The experiment's median duration is `r insight::format_value(median(dfsub$Experiment_Duration))` min (`r insight::format_ci(bayestestR::hdi(dfsub$Experiment_Duration, ci=0.5))`).
+
+```{r}
+dfsub |>
+  mutate(Participant = fct_reorder(Participant, Experiment_Duration),
+         Category = ifelse(Experiment_Duration > 50, "extra", "ok"),
+         Duration = ifelse(Experiment_Duration > 50, 50, Experiment_Duration)) |>
+  ggplot(aes(y = Participant, x = Duration)) +
+  geom_point(aes(color = Category, shape = Category)) +
+  geom_vline(xintercept = median(dfsub$Experiment_Duration), color = "red", linetype = "dashed") +
+  scale_shape_manual(values = c("extra" = 3, ok = 19)) +
+  scale_color_manual(values = c("extra" = "red", ok = "black")) +
+  guides(color = "none", shape = "none") +
+  ggside::geom_xsidedensity(fill = "grey", color=NA) +
+  ggside::scale_xsidey_continuous(expand = c(0, 0)) +
+  labs(
+    title = "Experiment Completion Time",
+    x = "Duration (in minutes)",
+    y = "Participants"
+  )  +
+  see::theme_modern() +
+  ggside::theme_ggside_void() +
+  theme(ggside.panel.scale = .3, 
+        axis.text.y = element_blank()) 
+```
+
+
+## Exclusion
+
+```{r}
+outliers <- c("S043", "S079")
+outliers_half <- c("S032", "S049")
+```
+
+
+
+### Reaction Time (per Block) {.tabset}
+
+```{r}
+#| message: false
+
+errorrate <- df |>
+  group_by(Participant, Illusion_Type, Block) |>
+  summarize(ErrorRate_per_block = sum(Error) / n()) |>
+  ungroup() |>
+  arrange(desc(ErrorRate_per_block))
+
+d_all <- estimate_density(filter(df, RT < 3)$RT)
+
+plot_distribution <- function(dat) {
+  
+  data_error <- errorrate |>
+    filter(Participant %in% unique(dat$Participant)) |>
+    group_by(Participant, Block) |>
+    summarize(y = mean(ErrorRate_per_block), .groups="drop") |>
+    mutate(x = ifelse(Block == "A", 2.1, 2.3),
+           color = case_when(
+              Participant %in% outliers ~ "red",
+              Participant %in% outliers_half ~ "orange",
+              TRUE ~ "blue"
+            ))
+  
+  dat |>
+    filter(RT < 3) |>
+    estimate_density(select = "RT", at = c("Participant", "Block")) |>
+    group_by(Participant) |>
+    normalize(select = "y") |>
+    ungroup() |>
+    mutate(
+      Participant = fct_relevel(Participant, sort(unique(dat$Participant))),
+      color = case_when(
+        Participant %in% outliers ~ "red",
+        Participant %in% outliers_half ~ "orange",
+        TRUE ~ "blue"
+      )
+    ) |>
+    ggplot(aes(x = x, y = y)) +
+    geom_bar(data = data_error, aes(fill = color), stat = "identity", width=0.19) +
+    geom_segment(aes(x = 2, xend = 2.4, y = 0.5, yend = 0.5), color = "black", linetype="dashed", linewidth = 0.5) +
+    geom_area(data = normalize(d_all, select = "y"), alpha = 0.2) +
+    geom_line(aes(color = color, group = interaction(Participant, Block), linetype = Block), linewidth = 0.8) +
+    # geom_vline(xintercept = 0.125, linetype = "dashed", color = "red", size = 0.5) +
+    scale_color_manual(values = c("red" = "#F44336", "orange" = "#FF9800", "blue" = "blue"), guide = "none") +
+    scale_fill_manual(values = c("red" = "#F44336", "orange" = "#FF9800", "blue" = "blue"), guide = "none") +
+    scale_x_continuous(expand = c(0, 0), breaks=c(0, 0.5, 1, 1.5, 2), labels=c("0", "0.5", "1", "1.5", "2")) +
+    scale_y_continuous(expand = c(0, 0)) +
+    coord_cartesian(xlim = c(0, 2.4)) +
+    theme_modern() +
+    theme(axis.text.y = element_blank(),
+          axis.line.y = element_blank(),
+          strip.text.x = element_text(size = rel(1.5)),
+          legend.position = "none") +
+    facet_wrap(~Participant, nrow=10) +
+    labs(y = "", x = "Reaction Time (s)")
+}
+```
+
+::: {.panel-tabset}
+
+#### 1-100
+
+```{r}
+#| fig-width: 15
+#| fig-height: 15
+
+plot_distribution(df[df$Participant %in% dfsub$Participant[1:100], ])
+```
+
+#### 101-200
+
+
+```{r}
+#| fig-width: 15
+#| fig-height: 15
+
+plot_distribution(df[df$Participant %in% dfsub$Participant[101:200], ])
+```
+
+:::
+
+We discarded `r length(outliers)` participants (entirely) and `r length(outliers_half)` participant's second blocks.
+
+```{r}
+df <- df |> 
+  filter(!Participant %in% outliers) |> 
+  filter(!((Block == "B") & (Participant %in% outliers_half)))
+```
+
+
+### Error Rate (per Block)
+
+For each block, we computed the error rate and, if more than 50%, we discarded the whole block (as it likely indicates that instructions got mixed up, for instance participants were selecting the smaller instead of the bigger circle).
+
+```{r p_outliers_errorblock}
+errorrate |>
+  estimate_density(at = c("Illusion_Type", "Block"), method = "KernSmooth") |>
+  ggplot(aes(x = x, y = y)) +
+  geom_line(aes(color = Illusion_Type, linetype = Block)) +
+  geom_vline(xintercept = 0.5, linetype = "dashed") +
+  scale_x_continuous(expand = c(0, 0), labels = scales::percent) +
+  scale_y_continuous(expand = c(0, 0)) +
+  scale_color_manual(values = c("Ebbinghaus" = "#2196F3", "MullerLyer" = "#4CAF50", "VerticalHorizontal" = "#FF5722")) +
+  labs(y = "Distribution", x = "Error Rate") +
+  theme_modern()
+
+remove_badblocks <- function(df) {
+  n <- nrow(df)
+  df <- df |>
+    group_by(Participant, Illusion_Type, Block) |>
+    mutate(ErrorRate_per_block = sum(Error) / n()) |>
+    ungroup() |>
+    filter(ErrorRate_per_block < 0.5) |>
+    select(-ErrorRate_per_block)
+
+  text <- paste0(
+    "We removed ",
+    n - nrow(df),
+    " (",
+    insight::format_value((n - nrow(df)) / n, as_percent = TRUE),
+    ") trials belonging to bad blocks."
+  )
+  list(data = df, text = text)
+}
+
+out <- remove_badblocks(df)
+print(paste("Illusion (session 1):", out$text))
+df <- out$data
+```
+
+### Reaction Time (per Tlock)
+
+```{r outliers_RTtrials}
+check_trials <- function(df) {
+  data <- df |>
+    mutate(Outlier = ifelse(RT >= 10, TRUE, FALSE)) |>
+    group_by(Participant) |>
+    mutate(Outlier = ifelse(RT < 0.150 | standardize(RT, robust = TRUE) > 4, TRUE, Outlier)) |>
+    ungroup()
+
+  p1 <- data |>
+    filter(RT < 10) |>
+    estimate_density(select = "RT", at = "Participant") |>
+    group_by(Participant) |>
+    normalize(select = "y") |>
+    ungroup() |>
+    merge(data |>
+      group_by(Participant) |>
+      mutate(Threshold = median(RT) + 4 * mad(RT)) |>
+      filter(Error == 0) |>
+      summarize(Threshold = mean(Threshold))) |>
+    mutate(Outlier = ifelse(x >= Threshold, TRUE, FALSE)) |>
+    ggplot(aes(x = x, y = y)) +
+    geom_area(data = normalize(estimate_density(filter(data, RT < 10), select = "RT"), select = "y"), alpha = 0.2) +
+    geom_line(aes(color = Participant, linetype = Outlier), alpha = 0.2) +
+    geom_vline(xintercept = c(125), linetype = "dashed", color = "red") +
+    scale_color_material_d("rainbow", guide = "none") +
+    scale_x_continuous(expand = c(0, 0)) +
+    scale_y_continuous(expand = c(0, 0)) +
+    guides(linetype = "none") +
+    coord_cartesian(xlim = c(0, 5)) +
+    theme_modern() +
+    theme(axis.text.y = element_blank()) +
+    labs(y = "", x = "Reaction Time (s)")
+
+
+  p2 <- data |>
+    group_by(Participant) |>
+    summarize(Outlier = sum(Outlier) / n()) |>
+    mutate(Participant = fct_reorder(Participant, Outlier)) |>
+    ggplot(aes(x = Participant, y = Outlier)) +
+    geom_bar(stat = "identity", aes(fill = Participant)) +
+    scale_fill_material_d("rainbow", guide = "none") +
+    scale_x_discrete(expand = c(0, 0)) +
+    scale_y_continuous(expand = c(0, 0), labels = scales::percent) +
+    see::theme_modern() +
+    theme(axis.text.x = element_blank()) +
+    labs(y = "Percentage of outlier trials")
+
+  text <- paste0(
+    "We removed ",
+    sum(data$Outlier),
+    " (",
+    insight::format_value(sum(data$Outlier) / nrow(data), as_percent = TRUE),
+    ") outlier trials (150 ms < RT < 4 MAD above median)."
+  )
+
+  data <- filter(data, Outlier == FALSE)
+  data$Outlier <- NULL
+
+  list(p = p1 / p2, data = data, text = text)
+}
+```
+
+```{r p_outliers_RTtrials}
+#| results: 'asis'
+
+out <- check_trials(df)
+out$text
+out$p
+df <- out$data
+```
+
+### Questionnaires
+
+
+```{r}
+outliers <- dfsub |>
+  select(IPIP6_SD, IPIP6_Duration, PID5_SD, PID5_Duration, SSS_SD, SSS_Duration) |>
+  standardize(robust=TRUE) |>
+  mutate(SD = rowSums(across(ends_with("SD"))), Duration = rowSums(across(ends_with("Duration"))))
+
+table <- dfsub |>
+  select(Participant, IPIP6_SD, IPIP6_Duration, PID5_SD, PID5_Duration, SSS_SD, SSS_Duration) |>
+  mutate_at(vars(ends_with("Duration")), \(x) ifelse(x > 10, 10, x)) |>
+  mutate(Participant = fct_reorder(Participant, desc(outliers$SD))) |>
+  arrange(Participant)
+
+data.frame(Participant = c("Average"), t(sapply(table[2:ncol(table)], mean, na.rm = TRUE))) |>
+  rbind(table) |>
+  gt::gt() |>
+  gt::fmt_number() |>
+  gt::data_color(columns = "Participant", fn=\(x) ifelse(x %in% outliers_half, "orange", "white")) |>
+  gt::data_color(columns = ends_with("Duration"),
+                 direction="column", palette = "RdBu") |>
+  gt::data_color(columns = ends_with("SD"),
+                 direction="column", palette = "RdBu", reverse=TRUE) |>
+  gt::data_color(direction="row", rows=1, palette = "grey") |>
+  gt::opt_interactive(use_compact_mode = TRUE)
+```
+
+
+
+## Final Sample
+
+```{r}
+dfsub <- filter(dfsub, !Participant %in% outliers)
+df <- filter(df, Participant %in% dfsub$Participant)
+```
+
+### Age
+
+```{r}
+p_age <- estimate_density(dfsub$Age) |>
+  normalize(select = y) |>
+  mutate(y = y * 86) |>  # To match the binwidth
+  ggplot(aes(x = x)) +
+  geom_histogram(data=dfsub, aes(x = Age, fill=Gender), bins=28) +
+  # geom_line(aes(y = y), color = "orange", linewidth=2) +
+  geom_vline(xintercept = mean(dfsub$Age), color = "red", linewidth=1.5) +
+  # geom_label(data = data.frame(x = mean(df$Age) * 1.15, y = 0.95 * 75), aes(y = y), color = "red", label = paste0("Mean = ", format_value(mean(df$Age)))) +
+  scale_fill_manual(values = c("Male"= "#64B5F6", "Female"= "#F06292", "Other"="orange")) +
+  scale_x_continuous(expand = c(0, 0)) +
+  scale_y_continuous(expand = c(0, 0)) +
+  labs(title = "Age", y = "Number of Participants", color = NULL, subtitle = "Distribution of participants' age") +
+  theme_modern(axis.title.space = 10) +
+  theme(
+    plot.title = element_text(size = rel(1.2), face = "bold", hjust = 0),
+    plot.subtitle = element_text(size = rel(1.2), vjust = 7),
+    axis.text.y = element_text(size = rel(1.1)),
+    axis.text.x = element_text(size = rel(1.1)),
+    axis.title.x = element_blank()
+  )
+p_age
+```
+
+
+
+
+
+### Education
+
+```{r}
+p_edu <- dfsub |>
+  mutate(Education = fct_relevel(Education, "Other", "High School", "Bachelor", "Master", "Doctorate")) |>
+  ggplot(aes(x = Education)) +
+  geom_bar(aes(fill = Education)) +
+  scale_y_continuous(expand = c(0, 0), breaks= scales::pretty_breaks()) +
+  scale_fill_viridis_d(guide = "none") +
+  labs(title = "Education", y = "Number of Participants", subtitle = "Participants per achieved education level") +
+  theme_modern(axis.title.space = 15) +
+  theme(
+    plot.title = element_text(size = rel(1.2), face = "bold", hjust = 0),
+    plot.subtitle = element_text(size = rel(1.2), vjust = 7),
+    axis.text.y = element_text(size = rel(1.1)),
+    axis.text.x = element_text(size = rel(1.1)),
+    axis.title.x = element_blank()
+  )
+p_edu
+```
+
+
+
+### Ethnicity
+
+```{r p_ethnicity}
+ggwaffle::waffle_iron(dfsub, ggwaffle::aes_d(group = Ethnicity), rows=10) |> 
+  ggplot(aes(x, y, fill = group)) + 
+  ggwaffle::geom_waffle() + 
+  coord_equal() + 
+  scale_fill_flat_d() + 
+  ggwaffle::theme_waffle() +
+  labs(title = "Self-reported Ethnicity", subtitle = "Each square represents a participant", fill="")  +
+  theme(
+    plot.title = element_text(size = rel(1.2), face = "bold", hjust = 0),
+    plot.subtitle = element_text(size = rel(1.2)),
+    axis.title.x = element_blank(),
+    axis.title.y = element_blank()
+  )
+```
+
+
+
+### Summary
+
+The final sample includes `r report::report_participants(dfsub, age="Age", sex="Sex", education="Education")`.
+
+## Save
+
+```{r}
+#| code-fold: false
+
+write.csv(dfsub, "../data/data_participants.csv", row.names = FALSE)
+write.csv(df, "../data/data_IllusionGame.csv", row.names = FALSE)
+```
