@@ -74,12 +74,15 @@ for i, file in enumerate(files):
 
     # Country
     country = demo["Country"]
-    country = "Russia" if country in ["Россия"] else country
+    country = "Russia" if country in ["Россия", "россия", "Российская Федерация ", "РФ"] else country
     country = "Georgia" if country in ["Грузия"] else country
     country = "Ukraine" if country in ["Украина"] else country
-    country = "Germany" if country in ["Германия"] else country
+    country = "Germany" if country in ["Германия", "германия", "Германия . Украина"] else country
     country = "Kazakhstan" if country in ["Казахстан"] else country
     country = "Belarus" if country in ["Беларусь"] else country
+    country = "Israel" if country in ["израиль"] else country
+    country = "Italy" if country in ["Италия"] else country
+    country = "Czech Republic" if country in ["Чехия"] else country
 
     df["Country"] = country
 
@@ -91,11 +94,12 @@ for i, file in enumerate(files):
         in [
             "русский",
             "русская",
-            "россиянин",
+            "россиянин ",
             "россиянка",
             "Русский",
             "Русская",
             "Россия",
+            "нет/русский",
         ]
         else nationality
     )
@@ -115,6 +119,16 @@ for i, file in enumerate(files):
         if nationality in ["белорус", "белоруска", "Белорус", "Белоруска"]
         else nationality
     )
+    nationality = (
+        "Jew"
+        if nationality in ["еврей", "еврейка"]
+        else nationality
+    )
+    nationality = (
+        "Tatar"
+        if nationality in ["татарка"]
+        else nationality
+    )
 
     # Assign NaN if nationality is an empty string
     nationality = np.nan if nationality in [""] else nationality
@@ -122,10 +136,17 @@ for i, file in enumerate(files):
     df["Nationality"] = nationality
 
     # Questionnaires =====================================================
+        # Questionnaire Order ------------------------------------------------
+    # Select all screens start _with 'questionnaire'
+    order = data["screen"].str.startswith("questionnaire")
+    order[order.isna()] = False
+    order = list(data[order]["screen"])
+
     # PID-5 --------------------------------------------------------------
     pid5 = data[data["screen"] == "questionnaire_pid5"].iloc[0]
 
     df["PID5_Duration"] = pid5["rt"] / 1000 / 60
+    df["PID5_Order"] = order.index("questionnaire_pid5") + 1
 
     pid5 = json.loads(pid5["response"])
     for item in pid5:
@@ -135,6 +156,7 @@ for i, file in enumerate(files):
     ipip6 = data[data["screen"] == "questionnaire_ipip6"].iloc[0]
 
     df["IPIP6_Duration"] = ipip6["rt"] / 1000 / 60
+    df["IPIP6_Order"] = order.index("questionnaire_ipip6") + 1
 
     ipip6 = json.loads(ipip6["response"])
     for item in ipip6:
