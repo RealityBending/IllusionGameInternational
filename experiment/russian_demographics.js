@@ -20,26 +20,12 @@ var demographics_browser_info = {
     },
     inclusion_function: (data) => {
         return data.mobile === false;
-    }
-};
-
-// Restrict mobile timeline =======================================================
-var restrict_mobile = {
-    timeline: [
-        {
-            type: jsPsychHtmlButtonResponse,
-            // This experiment is not available on mobile due to screen size restrictions.</b><br>Please return on laptop or computer.
-            stimulus: "<p><b>Данное исследование не адаптировано под мобильные устройства. Пожалуйста, используйте ноутбук или компьютер.</p>",
-            choices: []
-        }
-    ],
-    conditional_function: function () {
-        if (jsPsych.data.get().last(1).values()[0]["mobile"] == true) {
-            return true
-        } else {
-            return false
-        }
     },
+    exclusion_message: (data) => {
+        if (data.mobile === true) {
+            return "<p><b>Данное исследование не адаптировано под мобильные устройства.</b><br>Пожалуйста, используйте ноутбук или компьютер.</p>";
+        }
+    }
 }
 
 // Demographic info ====================================================================
