@@ -26,7 +26,7 @@ library(ggside)
 ```{r}
 #| code-fold: false
 
-dfsub <- read.csv("../data/rawdata.csv") |> 
+dfsub <- read.csv("../data/rawdata_participants.csv") |> 
    mutate(across(everything(), ~ifelse(.x == "", NA, .x))) 
 df <- read.csv("../data/rawdata_IllusionGame.csv") |> 
   group_by(Illusion_Type) |> 
@@ -84,8 +84,6 @@ dfsub$PID5_Antagonism <- rowMeans(pid5[grepl("Antagonism", names(pid5))])
 dfsub$PID5_Psychoticism <- rowMeans(pid5[grepl("Psychoticism", names(pid5))])
 dfsub$PID5_SD <- rowMeans(SD_per_dim(pid5, c("Disinhibition", "Detachment", "NegativeAffect",
                                              "Antagonism", "Psychoticism")))
-
-pid5 <- pid5[-22, ]
 ```
 
 ### Recruitment History
@@ -144,7 +142,7 @@ dfsub |>
 ## Exclusion
 
 ```{r}
-outliers <- c("")
+outliers <- c("tgp13kv9tr")
 outliers_half <- c("")
 ```
 
@@ -211,13 +209,13 @@ plot_distribution <- function(dat) {
 
 ::: {.panel-tabset}
 
-#### 1-22
+#### 1-44
 
 ```{r}
 #| fig-width: 15
 #| fig-height: 15
 
-plot_distribution(df[df$Participant %in% dfsub$Participant[1:22], ])
+plot_distribution(df[df$Participant %in% dfsub$Participant[1:44], ])
 ```
 
 :::
@@ -347,14 +345,13 @@ df <- out$data
 ```{r}
 outliers <- dfsub |>
   select(IPIP6_SD, IPIP6_Duration, PID5_SD, PID5_Duration) |>
-  slice(-22) |>
   standardize(robust=TRUE) |>
-  mutate(SD = rowSums(across(ends_with("SD"))), Duration = rowSums(across(ends_with("Duration"))))
+  mutate(SD = rowSums(across(ends_with("SD"), ~ ifelse(is.na(.), 0, .))),
+     Duration = rowSums(across(ends_with("Duration"), ~ ifelse(is.na(.), 0, .))))
 
 table <- dfsub |>
   select(Participant, IPIP6_SD, IPIP6_Duration, PID5_SD, PID5_Duration) |>
   mutate_at(vars(ends_with("Duration")), \(x) ifelse(x > 10, 10, x)) |>
-  slice(-22) |>
   mutate(Participant = fct_reorder(Participant, desc(outliers$SD))) |>
   arrange(Participant)
 
@@ -376,6 +373,10 @@ data.frame(Participant = c("Average"), t(sapply(table[2:ncol(table)], mean, na.r
 ```{r}
 dfsub <- filter(dfsub, !Participant %in% outliers)
 df <- filter(df, Participant %in% dfsub$Participant)
+dfsub <- dfsub |> 
+  mutate(Age = ifelse(!is.na(Age) & !grepl("^[0-9]+$", Age), NA, as.numeric(Age)))
+dfsub <- dfsub |> 
+  filter(!is.na(Age))
 ```
 
 ### Age
@@ -407,7 +408,6 @@ p_age
 ### Country
 
 ```{r p_country}
-
 p_country <- dfsub %>%
   group_by(Country) %>%
   summarize(n = n()) %>%

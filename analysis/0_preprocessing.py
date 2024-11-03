@@ -65,24 +65,34 @@ for i, file in enumerate(files):
 
     # Age
     df["Age"] = demo["age"]
+    df["Age"] = pd.to_numeric(df["Age"], errors="coerce")
 
     # Gender
     gender = demo["gender"]
-    gender = "Male" if gender in ["мужской", "м", "муж", "Муржской"] else "Female"
+    gender = "Male" if gender in ["мужской", "Мужской", "м", "М", "муж", "Муржской"] else gender
+    gender = "Female" if gender in ["женский", "ж", "жен"] else gender
+
+    # Assign NaN if gender is an empty string or cannot be identified
+    gender = np.nan if gender in ["", "a"] else gender
 
     df["Gender"] = gender
 
     # Country
     country = demo["Country"]
-    country = "Russia" if country in ["Россия", "россия", "Российская Федерация ", "РФ"] else country
+    country = "Russia" if country in ["Россия", "Россия ", "россия", "Российская Федерация ", "Российская Федерация", "РФ"] else country
     country = "Georgia" if country in ["Грузия"] else country
+    country = "Serbia" if country in ["Сербия"] else country
     country = "Ukraine" if country in ["Украина"] else country
     country = "Germany" if country in ["Германия", "германия", "Германия . Украина"] else country
-    country = "Kazakhstan" if country in ["Казахстан"] else country
+    country = "Sweden" if country in ["Швеция"] else country
     country = "Belarus" if country in ["Беларусь"] else country
     country = "Israel" if country in ["израиль"] else country
     country = "Italy" if country in ["Италия"] else country
     country = "Czech Republic" if country in ["Чехия"] else country
+    country = "Latvia" if country in ["Латвия"] else country
+
+    # Assign NaN if country is an empty string or cannot be identified
+    country = np.nan if country in ["", "a"] else country
 
     df["Country"] = country
 
@@ -97,9 +107,10 @@ for i, file in enumerate(files):
             "россиянин ",
             "россиянка",
             "Русский",
-            "Русская",
+            "Россиянин ",
             "Россия",
             "нет/русский",
+            "татарка/русская",
         ]
         else nationality
     )
@@ -125,13 +136,23 @@ for i, file in enumerate(files):
         else nationality
     )
     nationality = (
+        "German"
+        if nationality in ["немка"]
+        else nationality
+    )
+    nationality = (
         "Tatar"
         if nationality in ["татарка"]
         else nationality
     )
+    nationality = (
+        "European"
+        if nationality in ["европеец"]
+        else nationality
+    )
 
     # Assign NaN if nationality is an empty string
-    nationality = np.nan if nationality in [""] else nationality
+    nationality = np.nan if nationality in ["", "a"] else nationality
 
     df["Nationality"] = nationality
 
@@ -194,6 +215,6 @@ for i, file in enumerate(files):
 alldata = alldata.drop(columns=["Platform", "Date_OSF"])
 
 # Save data ==============================================================
-alldata.to_csv("../data/rawdata.csv", index=False)
+alldata.to_csv("../data/rawdata_participants.csv", index=False)
 alldata_ig.to_csv("../data/rawdata_IllusionGame.csv", index=False)
 print("Done!")

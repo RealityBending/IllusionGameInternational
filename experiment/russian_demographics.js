@@ -22,10 +22,11 @@ var demographics_browser_info = {
         return data.mobile === false;
     },
     exclusion_message: (data) => {
-        if (data.mobile === true) {
+        if (data.mobile) {
             return "<p><b>Данное исследование не адаптировано под мобильные устройства.</b><br>Пожалуйста, используйте ноутбук или компьютер.</p>";
         }
-    }
+            // This experiment is not available on mobile due to screen size restrictions. Please return on laptop or computer.
+    },
 }
 
 // Demographic info ====================================================================
