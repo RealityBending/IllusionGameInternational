@@ -1,39 +1,30 @@
 import json
 import numpy as np
 import pandas as pd
-import requests
+import os
 
-# Load useful functions ===================================================
-exec(
-    requests.get(
-        "https://raw.githubusercontent.com/RealityBending/scripts/main/data_OSF.py"
-    ).text
-)
-
-# Connect to OSF and get files ============================================
-token = ""
-files = osf_listfiles(  # Function in the data_OSF.py script loaded above
-    token=token,
-    data_subproject="t2su5",  # Data subproject ID
-    after_date="18/06/2024",
-)
+# Specify the path to the folder containing the files
+path = "../../../../Downloads/OSF_raw_data/osfstorage-archive"
+files = [f for f in os.listdir(path) if f.endswith('.csv')]
 
 # Loop through files ======================================================
-# Initialize empty dataframes
-alldata = pd.DataFrame()
-alldata_ig = pd.DataFrame()
+alldata = pd.DataFrame() # Initialize empty dataframes
+alldata_ig = pd.DataFrame() # Initialize empty dataframes
 
 for i, file in enumerate(files):
-    print(f"File N°{i+1}/{len(files)}")  # Print progress
+    print(f"File N°{i+1}") # Print progress
 
     # Skip if participant already in the dataset
     if (
         "Participant" in alldata.columns
-        and file["name"] in alldata["Participant"].values
+        and file in alldata["Participant"].values
     ):
         continue
 
-    data = osf_download(file)  # Function in the data_OSF.py script loaded above
+    # Full path to the file
+    file_path = os.path.join(path, file) 
+    # Load the data from the file into a DataFrame
+    data = pd.read_csv(file_path)
 
     # Participant =========================================================
     data["screen"].unique()
@@ -41,23 +32,22 @@ for i, file in enumerate(files):
     # Browser info --------------------------------------------------------
     browser = data[data["screen"] == "browser_info"].iloc[0]
 
-    df = pd.DataFrame(
-        {
-            "Participant": file["name"],
-            "Experiment_Duration": data["time_elapsed"].max() / 1000 / 60,
-            "Date_OSF": file["date"],
-            "Date": browser["date"],
-            "Time": browser["time"],
-            "Browser": browser["browser"],
-            "Mobile": browser["mobile"],
-            "Platform": browser["os"],
-            "Screen_Width": browser["screen_width"],
-            "Screen_Height": browser["screen_height"],
-            "Language": browser["language"],
-            "Source": browser["researcher"],
-        },
-        index=[0],
-    )
+    # Creating the DataFrame with participant data
+    participant_name = os.path.splitext(file)[0]
+
+    df = pd.DataFrame({
+        "Participant": participant_name,
+        "Experiment_Duration": data["time_elapsed"].max() / 1000 / 60,
+        "Date": browser.get("date", np.nan),
+        "Time": browser.get("time", np.nan),
+        "Browser": browser.get("browser", np.nan),
+        "Mobile": browser.get("mobile", np.nan),
+        "Platform": browser.get("os", np.nan),
+        "Screen_Width": browser.get("screen_width", np.nan),
+        "Screen_Height": browser.get("screen_height", np.nan),
+        "Language": browser.get("language", np.nan),
+        "Source": browser.get("researcher", np.nan),
+       }, index=[0])
 
     # Demographics --------------------------------------------------------
     demo = data[data["screen"] == "demographics"].iloc[0]
@@ -190,7 +180,7 @@ for i, file in enumerate(files):
     df_ig = ig[
         ["Illusion_Type", "Illusion_Difference", "Illusion_Strength"]
     ].reset_index(drop=True)
-    df_ig["Participant"] = file["name"]
+    df_ig["Participant"] = participant_name
     df_ig["File"] = [
         s.replace("https://realitybending.github.io/IllusionGame/v3/stimuli/", "")
         for s in ig["stimulus"].values
@@ -212,7 +202,7 @@ for i, file in enumerate(files):
     alldata_ig = pd.concat([alldata_ig, df_ig], axis=0, ignore_index=True)
 
 # Remove columns =========================================================
-alldata = alldata.drop(columns=["Platform", "Date_OSF"])
+alldata = alldata.drop(columns=["Platform"])
 
 # Save data ==============================================================
 alldata.to_csv("../data/rawdata_participants.csv", index=False)
